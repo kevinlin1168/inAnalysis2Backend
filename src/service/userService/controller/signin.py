@@ -31,10 +31,10 @@ class Singin(Resource):
                 result = db.cursor.fetchall()
                 logging.info(f'Search result {result}')
 
-                if result == null :
-                    return {"status":"success","msg":"user don't exist"},200
-                else:
+                if result != () :
                     return {"status":"success","msg":"","data":{"token":password}},200
+                else:
+                    return {"status":"success","msg":"user don't exist"},200
 
             except Exception as e:
                 db.conn.rollback()

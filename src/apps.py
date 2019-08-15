@@ -2,6 +2,7 @@ import os
 from flask import Flask
 from flask_restful import Api
 from service.userService.controller.signin import Singin
+from service.userService.controller.signup import Singup
 import logging
 import sys
 sys.dont_write_bytecode = True #disable __pycache__
@@ -13,6 +14,8 @@ api = Api(app)
 
 # bind api
 api.add_resource(Singin, "/user/signin")
+api.add_resource(Singup, "/user/signup")
+
 
 if __name__ == "__main__":
     if '--debug' in sys.argv:
