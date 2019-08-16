@@ -1,16 +1,15 @@
+from flask import session
 from flask_restful import Resource, reqparse
-from werkzeug.datastructures import FileStorage
 from params import params
 from utils import tokenValidator,sql
+from service.userService.controller.getUserStatus import GetUserStatus
 import hashlib
 import glob
 import uuid
 import logging
 
-# app = Flask(__name__)
-# api = Api(app)
-
 param=params()
+getUserStatus = GetUserStatus()
 
 class Singin(Resource):
     def post(self):
@@ -28,13 +27,15 @@ class Singin(Resource):
             try:
                 db=sql()
                 db.cursor.execute(f"select * from user where `user_account`='{args['account']}' AND `user_password`='{password}'")
-                result = db.cursor.fetchall()
-                logging.info(f'Search result {result}')
+                result = db.cursor.fetchone()
+                logging.info(f'{result}')
 
-                if result != () :
-                    return {"status":"success","msg":"","data":{"token":password}},200
+                if result != None :
+                    session[result[0]] = result[2]
+                    session.permanent = True
+                    return {"status":"success","msg":"","data":f'{result[0]}'},200
                 else:
-                    return {"status":"success","msg":"user don't exist"},200
+                    return {"status":"error","msg":"user don't exist"},200
 
             except Exception as e:
                 db.conn.rollback()

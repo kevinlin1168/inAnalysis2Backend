@@ -1,5 +1,4 @@
 from flask_restful import Resource, reqparse
-from werkzeug.datastructures import FileStorage
 from params import params
 from utils import tokenValidator,sql
 from service.userService.utils import userUidGenerator
@@ -7,9 +6,6 @@ import hashlib
 import glob
 import uuid
 import logging
-
-# app = Flask(__name__)
-# api = Api(app)
 
 param=params()
 
@@ -22,6 +18,7 @@ class Singup(Resource):
             parser.add_argument('password',type=str,required=True)
             parser.add_argument('email',type=str,required=False)
             args = parser.parse_args()
+            logging.info(f'{args}')
 
             db=sql()
             db.cursor.execute(f"select * from user where `user_account`='{args['account']}'")

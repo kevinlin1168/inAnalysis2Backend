@@ -4,6 +4,7 @@ class params():
         self.port=7878
 
         self.servicepath='./src/service/'
+        self.secretKey = 'iloveraid1'
 
         # self.dataCollectServiceRoot=self.servicepath+'dataService/'
         # self.visualizeServiceRoot=self.servicepath+'visualizeService/'

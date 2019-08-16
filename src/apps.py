@@ -1,8 +1,11 @@
 import os
 from flask import Flask
 from flask_restful import Api
+from flask_login import LoginManager
+from flask_cors import CORS
 from service.userService.controller.signin import Singin
 from service.userService.controller.signup import Singup
+from datetime import timedelta
 import logging
 import sys
 sys.dont_write_bytecode = True #disable __pycache__
@@ -10,7 +13,11 @@ from params import params
 
 par=params()
 app = Flask(__name__)
+app.config['SECRET_KEY'] = par.secretKey
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
 api = Api(app)
+login_manager = LoginManager(app)
+cors = CORS(app)
 
 # bind api
 api.add_resource(Singin, "/user/signin")
