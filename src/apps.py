@@ -5,6 +5,9 @@ from flask_login import LoginManager
 from flask_cors import CORS
 from service.userService.controller.signin import Singin
 from service.userService.controller.signup import Singup
+from service.fileService.controller.upload import Upload
+from service.projectService.controller.addProject import AddProject
+from service.projectService.controller.getProjectByUser import GetProjectByUserID
 from datetime import timedelta
 import logging
 import sys
@@ -22,6 +25,9 @@ cors = CORS(app)
 # bind api
 api.add_resource(Singin, "/user/signin")
 api.add_resource(Singup, "/user/signup")
+api.add_resource(Upload, '/data/upload')
+api.add_resource(AddProject, '/project/add')
+api.add_resource(GetProjectByUserID, '/project/getProjectByUserID')
 
 
 if __name__ == "__main__":
