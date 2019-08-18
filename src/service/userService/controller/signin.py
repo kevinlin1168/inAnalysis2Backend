@@ -1,12 +1,13 @@
-from flask import session
+from flask import session, make_response
 from flask_restful import Resource, reqparse
 from params import params
-from utils import tokenValidator,sql
+from utils import tokenGenerator,tokenValidator,sql
 from service.userService.controller.getUserStatus import GetUserStatus
 import hashlib
 import glob
 import uuid
 import logging
+import json
 
 param=params()
 getUserStatus = GetUserStatus()
@@ -31,9 +32,8 @@ class Singin(Resource):
                 logging.info(f'{result}')
 
                 if result != None :
-                    session[result[0]] = result[2]
-                    session.permanent = True
-                    return {"status":"success","msg":"","data":f'{result[0]}'},200
+                    token = tokenGenerator()
+                    return {"status": "success","msg":"","data": {"userID":f'{result[0]}', "token":f'{token}'}}
                 else:
                     return {"status":"error","msg":"user don't exist"},200
 

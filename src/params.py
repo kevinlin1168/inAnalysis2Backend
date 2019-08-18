@@ -9,8 +9,8 @@ class params():
         # self.dataCollectServiceRoot=self.servicepath+'dataService/'
         # self.visualizeServiceRoot=self.servicepath+'visualizeService/'
 
-        self.dataFileType={'num':['.csv'],'cv':['.zip'],'nlp':['.tsv']}
-        self.dataTypeList=['Abnormal Detection', 'Regression', 'Classification', 'Clustering']
+        self.dataFileTypeList={'num':['.csv'],'cv':['.zip'],'nlp':['.tsv']}
+        self.projectTypeList=['Abnormal Detection', 'Regression', 'Classification', 'Clustering']
         self.dbhost='140.112.26.132'
         self.dbuser='ican'
         self.dbpwd='lab125a'

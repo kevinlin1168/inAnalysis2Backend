@@ -1,4 +1,3 @@
-from flask import session
 from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
@@ -16,6 +15,7 @@ class AddProject(Resource):
         parser.add_argument('projectType',type=str,required=True)
         parser.add_argument('dataType',type=str,required=True)
         parser.add_argument('userID',type=str,required=True)
+        parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
         logging.debug(f"[AddProject] args: {args}")
 
@@ -25,15 +25,15 @@ class AddProject(Resource):
         userID = args['userID']
 
         #check user isLogin
-        if getUserStatus.checkUserStatus(userID):
+        if tokenValidator(args['token']):
 
-            projectTypeList=param.dataFileType
+            projectTypeList=param.projectTypeList
             #check project type
             if args['projectType'] not in projectTypeList:
                 return {"status":"error","msg":"project type not supported","data":{}},400
 
             
-            dataTypeList=param.dataTypeList
+            dataTypeList=param.dataFileTypeList
             #check data type
             if dataType not in dataTypeList:
                 return {"status":"error","msg":"data type not supported","data":{}},400

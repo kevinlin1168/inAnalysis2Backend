@@ -12,14 +12,14 @@ class GetProjectByUserID(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('userID',type=str,required=True)
+        parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
         logging.debug(f"[GetProject] args: {args}")
 
         userID = args['userID']
-        logging.info(f'{getUserStatus.checkUserStatus(userID)}')
 
         #check user isLogin
-        if getUserStatus.checkUserStatus(userID):
+        if tokenValidator(args['token']):
             
             resp = []
             try:
