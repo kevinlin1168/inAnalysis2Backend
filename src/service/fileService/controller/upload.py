@@ -19,6 +19,7 @@ class Upload(Resource):
         parser.add_argument('file', type=FileStorage, location='files',required=True)
         parser.add_argument('type',type=str,required=True)
         parser.add_argument('userID',type=str,required=True)
+        parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
         logging.debug(f"[Upload] args: {args}")
         file = args['file']
@@ -26,9 +27,9 @@ class Upload(Resource):
         userID=args['userID']
 
         #check user isLogin
-        if getUserStatus.checkUserStatus(userID):
+        if tokenValidator(args['token']):
 
-            pft=param.dataFileType
+            pft=param.dataFileTypeList
             #check project type
             if dataType not in pft:
                 return {"status":"error","msg":"project type not supported","data":{}},400

@@ -26,7 +26,7 @@ cors = CORS(app)
 # bind api
 api.add_resource(Singin, "/user/signin")
 api.add_resource(Singup, "/user/signup")
-api.add_resource(Upload, '/data/upload')
+api.add_resource(Upload, '/file/upload')
 api.add_resource(AddProject, '/project/add')
 api.add_resource(GetProjectByUserID, '/project/getProjectByUserID')
 api.add_resource(DeleteProject, '/project/delete')
