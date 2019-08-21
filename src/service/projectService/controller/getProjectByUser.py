@@ -2,11 +2,9 @@ from flask import session
 from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
-from service.userService.controller.getUserStatus import GetUserStatus
 import logging
 
 param=params()
-getUserStatus = GetUserStatus()
 
 class GetProjectByUserID(Resource):
     def post(self):

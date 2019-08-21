@@ -2,7 +2,6 @@ from flask import session, make_response
 from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenGenerator,tokenValidator,sql
-from service.userService.controller.getUserStatus import GetUserStatus
 import hashlib
 import glob
 import uuid
@@ -10,7 +9,6 @@ import logging
 import json
 
 param=params()
-getUserStatus = GetUserStatus()
 
 class Singin(Resource):
     def post(self):
@@ -31,11 +29,18 @@ class Singin(Resource):
                 result = db.cursor.fetchone()
                 logging.info(f'{result}')
 
-                if result != None :
-                    token = tokenGenerator()
-                    return {"status": "success","msg":"","data": {"userID":f'{result[0]}', "token":f'{token}'}}
-                else:
-                    return {"status":"error","msg":"user don't exist"},200
+                try:
+                    if result != None :
+                        data = {
+                            'userID' : result[0],
+                            'userName' : result[1]
+                        }
+                        token = tokenGenerator(data)
+                        return {"status": "success","msg":"","data": {"userID":f'{result[0]}',"userName":f'{result[1]}', "token":f'{token}'}}
+                    else:
+                        return {"status":"error","msg":"user don't exist"},200
+                except Exception as e:
+                    logging.info(str(e))
 
             except Exception as e:
                 db.conn.rollback()

@@ -1,38 +1,34 @@
 import logging
 from params import params
 import pymysql
-import hmac
-import time  
-import base64
+import time
+import jwt  
 import json
 
 param = params()
 
-def tokenGenerator(key = param.secretKey, expire=3600):
-    timeExpire = str(time.time() + expire)  
-    timeByte = timeExpire.encode("utf-8")  
-    sha1_tshexstr  = hmac.new(key.encode("utf-8"),timeByte,'sha1').hexdigest()  
-    token = timeExpire+':'+sha1_tshexstr  
-    b64_token = base64.urlsafe_b64encode(token.encode("utf-8"))  
-    return b64_token.decode("utf-8")  
+def tokenGenerator(data, key = param.secretKey, expire=3600):
+    payload = {
+        "iss": "inanalysis.com",
+        "iat": int(time.time()),
+        "exp": int(time.time()) + expire,
+        "aud": "www.inanalysis.com",
+        "sub": data['userID'],
+        "username": data['userName']
+    }
+    logging.info(f'data: {payload}')
+    token = jwt.encode(payload, key, algorithm='HS256').decode('utf-8')
+    logging.info(f'token: {token}')
+    return token
 
 def tokenValidator(token, key = param.secretKey):
-    tokenDecode = base64.urlsafe_b64decode(token).decode('utf-8')  
-    tokenList = tokenDecode.split(':')  
-    if len(tokenList) != 2:  
-        return False  
-    timeExpire = tokenList[0]  
-    if float(timeExpire) < time.time():  
-        # token expired  
-        return False  
-    known_sha1_tsstr = tokenList[1]  
-    sha1 = hmac.new(key.encode("utf-8"),timeExpire.encode('utf-8'),'sha1')  
-    calc_sha1_tsstr = sha1.hexdigest()  
-    if calc_sha1_tsstr != known_sha1_tsstr:  
-        # token certification failed  
-        return False  
-    # token certification success  
-    return True  
+    try :
+        payload = jwt.decode(token, key, audience='www.inanalysis.com', algorithms=['HS256'])
+        if payload:
+            return True
+        return False
+    except Exception as e:
+        return False
 
 class sql():
     def __init__(self):

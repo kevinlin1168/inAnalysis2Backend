@@ -1,12 +1,10 @@
 from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
-from service.userService.controller.getUserStatus import GetUserStatus
 from service.projectService.utils import projectUidGenerator
 import logging
 
 param=params()
-getUserStatus = GetUserStatus()
 
 class AddProject(Resource):
     def post(self):

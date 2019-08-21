@@ -3,7 +3,6 @@ from flask_restful import Api, Resource, reqparse
 from werkzeug.datastructures import FileStorage
 from params import params
 from utils import tokenValidator,sql
-from service.userService.controller.getUserStatus import GetUserStatus
 import requests
 import glob
 import logging
@@ -12,7 +11,6 @@ import logging
 # api = Api(app)
 
 param=params()
-getUserStatus = GetUserStatus()
 
 class Upload(Resource):
     def post(self):
@@ -51,7 +49,7 @@ class Upload(Resource):
             }
 
             #todo change ip
-            resp = requests.post( 'http://192.168.1.76:8787/data/upload', data = data)
+            resp = requests.post( param.corehost + '/data/upload', data = data)
 
             logging.info(f'{resp}')
 

@@ -8,6 +8,7 @@ from service.userService.controller.signup import Singup
 from service.fileService.controller.upload import Upload
 from service.projectService.controller.addProject import AddProject
 from service.projectService.controller.getProjectByUser import GetProjectByUserID
+from service.projectService.controller.deleteProject import DeleteProject
 from datetime import timedelta
 import logging
 import sys
@@ -28,6 +29,7 @@ api.add_resource(Singup, "/user/signup")
 api.add_resource(Upload, '/data/upload')
 api.add_resource(AddProject, '/project/add')
 api.add_resource(GetProjectByUserID, '/project/getProjectByUserID')
+api.add_resource(DeleteProject, '/project/delete')
 
 
 if __name__ == "__main__":
