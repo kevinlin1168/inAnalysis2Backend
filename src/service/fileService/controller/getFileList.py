@@ -30,12 +30,8 @@ class GetFileList(Resource):
                 result = db.cursor.fetchall()
                 data=[list(a) for a in result]
                 for item in data:
-                    test: {
-                        'test1': 'test1',
-                        'test2': 'test2'
-                    }
                     form = {
-                        'fileUids': json.dumps(test),
+                        'fileUids': json.dumps([item[0]]),
                         'tokenstr': 'ab',
                         'tokenint': 293
                     }
@@ -46,8 +42,9 @@ class GetFileList(Resource):
                     if responseObj["status"] == 'success':
                         respItem = {
                             'fileID': item[0],
-                            'fileName': item[2],
-                            'fileStatus': responseObj["status"][0]
+                            'fileName': item[1],
+                            'fileType': item[1][(item[1].rfind(".")+1):],
+                            'fileStatus': responseObj["data"]["status"][0]
                         }
                         resp.append(respItem)
             except Exception as e:

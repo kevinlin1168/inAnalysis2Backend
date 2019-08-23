@@ -23,10 +23,6 @@ class GetFileColumn(Resource):
         if tokenValidator(args['token']):
             try:
                 db=sql()
-                test: {
-                    'test1': 'test1',
-                    'test2': 'test2'
-                }
                 form = {
                         'fileUid': json.dump(test),
                         'tokenstr': 'ab',

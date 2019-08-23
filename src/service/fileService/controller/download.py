@@ -29,8 +29,7 @@ class DownloadFile(Resource):
                 }
                 logging.info(f'form:{form}')
                 resp = requests.get( coreApi.Download, data= form)
-                response = resp.json()
-                logging.info(f'response: {response}')
+                logging.info(f'response: {resp}')
             except Exception as e:
                 logging.error(str(e))
 

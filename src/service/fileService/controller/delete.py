@@ -31,7 +31,8 @@ class DeleteFile(Resource):
                 response = requests.post( coreApi.DeleteFile, data= form)
                 responseObj = response.json()
                 logging.info(f'result: {responseObj}')
-                if response["status"] == "success":
+                if responseObj["status"] == "success":
+                    logging.info('success')
                     db.cursor.execute(f"delete from file where `file_id` = '{fileID}'")
                     db.conn.commit()
                     logging.info(f"[DeleteFile] OK with file id {fileID}")
