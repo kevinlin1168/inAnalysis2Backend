@@ -42,17 +42,23 @@ class Upload(Resource):
             if filetype not in pft[dataType]:
                 return {"status":"error","msg":"file type error","data":{}},400
 
+            files = {
+                'file': (file.filename, file.stream.read(), file.mimetype)
+            }
             data = {
-                'file': file,
                 'type': dataType,
-                'tokenstr': 'test',
-                'tokenint': 123
+                'tokenstr': 'ab',
+                'tokenint': 293
             }
 
+            logging.debug(f'data: {data}')
             #todo change ip
-            resp = requests.post( param.corehost + '/data/upload', data = data)
+            resp = requests.post( param.corehost + '/data/upload', files = files, data= data)
+            # resp = requests.post( 'http://127.0.0.1:8787' + '/data/upload', files = files, data= data)
 
             logging.info(f'{resp}')
+
+            return {"status":"success","msg":f"{resp}","data":{}},200
 
             # try:
             #     db=sql()
