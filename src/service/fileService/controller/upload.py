@@ -2,6 +2,7 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse
 from werkzeug.datastructures import FileStorage
 from params import params
+from coreApis import coreApis
 from utils import tokenValidator,sql
 import requests
 import glob
@@ -11,6 +12,7 @@ import logging
 # api = Api(app)
 
 param=params()
+coreApi = coreApis()
 
 class Upload(Resource):
     def post(self):
@@ -19,12 +21,14 @@ class Upload(Resource):
         parser.add_argument('file', type=FileStorage, location='files',required=True)
         parser.add_argument('type',type=str,required=True)
         parser.add_argument('userID',type=str,required=True)
+        parser.add_argument('projectID',type=str,required=True)
         parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
         logging.debug(f"[Upload] args: {args}")
         file = args['file']
         dataType=args['type']
         userID=args['userID']
+        projectID=args['projectID']
 
         #check user isLogin
         if tokenValidator(args['token']):
@@ -53,23 +57,26 @@ class Upload(Resource):
 
             logging.debug(f'data: {data}')
             #todo change ip
-            resp = requests.post( param.corehost + '/data/upload', files = files, data= data)
-            # resp = requests.post( 'http://127.0.0.1:8787' + '/data/upload', files = files, data= data)
-
-            logging.info(f'{resp}')
-
-            return {"status":"success","msg":f"{resp}","data":{}},200
-
-            # try:
-            #     db=sql()
-            #     db.cursor.execute(f"insert into files (`fid`,`dataType`,`path`,`numFile`,`inuse`) values ('{uid}','{dataType}','{savedPath}','{numFilePath}',False);")
-            #     db.conn.commit()
-            # except Exception as e:
-            #     db.conn.rollback()
-            # finally:
-            #     db.conn.close()
-            # logging.info(f"[Upload] OK with file uid {uid}")
-            # return {"status":"success","msg":"","data":{"fileUid":uid}},201
+            resp = requests.post( coreApi.Upload , files = files, data= data)
+            response = resp.json()
+            logging.info(f'{response}')
+            
+            if response["status"] == "success":
+                try:
+                    fileID = response["data"]["fileUid"]
+                    db=sql()
+                    db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{fileID}','{filename}','{userID}','{projectID}');")
+                    db.conn.commit()
+                    logging.info(f"[Upload] OK with file uid {fileID}")
+                    return response
+                except Exception as e:
+                    db.conn.rollback()
+                    logging.error(str(e))
+                finally:
+                    db.conn.close()
+                
+            else:
+                return response
         
         else:
             return {"status":"error","msg":"user did not login","data":{}},401

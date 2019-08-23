@@ -5,6 +5,9 @@ from flask_cors import CORS
 from service.userService.controller.signin import Singin
 from service.userService.controller.signup import Singup
 from service.fileService.controller.upload import Upload
+from service.fileService.controller.getFileList import GetFileList
+from service.fileService.controller.delete import DeleteFile
+from service.fileService.controller.download import DownloadFile
 from service.projectService.controller.addProject import AddProject
 from service.projectService.controller.getProjectByUser import GetProjectByUserID
 from service.projectService.controller.deleteProject import DeleteProject
@@ -25,6 +28,9 @@ cors = CORS(app)
 api.add_resource(Singin, "/user/signin")
 api.add_resource(Singup, "/user/signup")
 api.add_resource(Upload, '/file/upload')
+api.add_resource(GetFileList, '/file/getFileList')
+api.add_resource(DeleteFile, '/file/delete')
+api.add_resource(DownloadFile, '/file/download')
 api.add_resource(AddProject, '/project/add')
 api.add_resource(GetProjectByUserID, '/project/getProjectByUserID')
 api.add_resource(DeleteProject, '/project/delete')
