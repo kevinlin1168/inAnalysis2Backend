@@ -38,11 +38,10 @@ class GetFileList(Resource):
                     logging.info(f'form:{form}')
                     response = requests.post( coreApi.GetFileStatus , data= form)
                     responseObj = response.json()
-                    logging.info(f'result: {responseObj}')
                     if responseObj["status"] == 'success':
                         respItem = {
                             'fileID': item[0],
-                            'fileName': item[1],
+                            'fileName': item[1][:(item[1].rfind("."))],
                             'fileType': item[1][(item[1].rfind(".")+1):],
                             'fileStatus': responseObj["data"]["status"][0]
                         }

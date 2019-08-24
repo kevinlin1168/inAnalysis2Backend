@@ -21,24 +21,17 @@ class GetFileColumn(Resource):
 
         #check user isLogin
         if tokenValidator(args['token']):
-            try:
-                db=sql()
-                form = {
-                        'fileUid': json.dump(test),
-                        'tokenstr': 'ab',
-                        'tokenint': 293
-                    }
-                logging.info(f'form:{form}')
-                response = requests.post( coreApi.GetColumn, data= form)
-                responseObj = response.json()
-                logging.info(f'result: {responseObj}')
-                return responseObj
-            except Exception as e:
-                logging.error(str(e))
-                db.conn.rollback()
-            finally:
-                db.conn.close()
+            form = {
+                    'fileUid': fileID,
+                    'tokenstr': 'ab',
+                    'tokenint': 293
+                }
+            response = requests.post( coreApi.GetColumn, data= form)
+            responseObj = response.json()
+            logging.info(f'result: {responseObj}')
 
+            return responseObj
+                
 
         else:
             return {"status":"error","msg":"user did not login","data":{}},401
