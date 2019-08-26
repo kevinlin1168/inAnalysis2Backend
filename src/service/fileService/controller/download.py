@@ -1,9 +1,11 @@
+from flask import make_response
 from flask_restful import Resource, reqparse
 from params import params
 from coreApis import coreApis
 from utils import tokenValidator,sql
 import logging
 import requests
+import mimetypes
 
 param=params()
 coreApi = coreApis()
@@ -29,7 +31,11 @@ class DownloadFile(Resource):
                 }
                 logging.info(f'form:{form}')
                 resp = requests.get( coreApi.Download, data= form)
-                logging.info(f'response: {resp}')
+                logging.info(resp)
+                response = make_response(resp.content)
+                response.headers['Content-Type'] = 'application/octet-stream; charset=utf-8'
+                response.headers['Content-Disposition'] = f'attachment; filename={fileName}'
+                return response
             except Exception as e:
                 logging.error(str(e))
 
