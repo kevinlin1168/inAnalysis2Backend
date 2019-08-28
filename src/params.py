@@ -16,4 +16,4 @@ class params():
         self.dbpwd='lab125a'
         self.dbschema='inanalysis'
 
-        self.corehost='http://140.112.26.135:8787'
+        self.corehost='http://140.112.26.135:8788'

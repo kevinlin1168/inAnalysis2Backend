@@ -12,6 +12,10 @@ from service.fileService.controller.getColumn import GetFileColumn
 from service.projectService.controller.addProject import AddProject
 from service.projectService.controller.getProjectByUser import GetProjectByUserID
 from service.projectService.controller.deleteProject import DeleteProject
+from service.visualizeService.controller.getVisAlgoList import GetVisAlgoList
+from service.visualizeService.controller.dataViz import dataViz
+from service.analyticService.controller.getPreprocessAlgo import GetPreprocessAlgoList
+from service.analyticService.controller.doPreprocess import DoPreprocess
 from datetime import timedelta
 import logging
 import sys
@@ -36,6 +40,10 @@ api.add_resource(GetFileColumn, '/file/getColumn')
 api.add_resource(AddProject, '/project/add')
 api.add_resource(GetProjectByUserID, '/project/getProjectByUserID')
 api.add_resource(DeleteProject, '/project/delete')
+api.add_resource(GetVisAlgoList, '/visualize/getAlgo')
+api.add_resource(dataViz, '/visualize/doVisualize')
+api.add_resource(GetPreprocessAlgoList, '/analytic/getPreprocessAlgo')
+api.add_resource(DoPreprocess, '/analytic/doPreprocess')
 
 
 if __name__ == "__main__":

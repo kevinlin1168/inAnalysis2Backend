@@ -8,14 +8,17 @@ import requests
 param=params()
 coreApi=coreApis()
 
-class dataViz(Resource):
+class GetVisAlgoList(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('fileID', type=str, required=True)
-        parser.add_argument('algoName', type=str, required=True)
-        parser.add_argument('datacol', type=str, required=True)
         parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
-        logging.debug(f"[dataViz] args: {args}")
+        logging.debug(f"[GetVisAlgoList] args: {args}")
+        token = args['token']
 
-        fileID = args['fileID']
+        #check user isLogin
+        if tokenValidator(token):
+            resp = requests.get(coreApi.GetDataVizAlgoList)
+            return resp.json()
+        else:
+            return {"status":"error","msg":"user did not login","data":{}},401

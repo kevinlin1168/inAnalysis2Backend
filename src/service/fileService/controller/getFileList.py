@@ -19,9 +19,10 @@ class GetFileList(Resource):
         logging.debug(f"[GetFileList] args: {args}")
 
         projectID = args['projectID']
+        token = args['token']
 
         #check user isLogin
-        if tokenValidator(args['token']):
+        if tokenValidator(token):
             
             resp = []
             try:
@@ -32,8 +33,7 @@ class GetFileList(Resource):
                 for item in data:
                     form = {
                         'fileUids': json.dumps([item[0]]),
-                        'tokenstr': 'ab',
-                        'tokenint': 293
+                        'token': token
                     }
                     logging.info(f'form:{form}')
                     response = requests.post( coreApi.GetFileStatus , data= form)

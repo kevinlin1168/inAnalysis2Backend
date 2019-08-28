@@ -4,34 +4,21 @@ from coreApis import coreApis
 from utils import tokenValidator,sql
 import logging
 import requests
-import json
 
 param=params()
 coreApi=coreApis()
 
-class GetFileColumn(Resource):
+class GetPreprocessAlgoList(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('fileID', type=str, required=True)
         parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
-        logging.debug(f"[GetFileColumn] args: {args}")
-
-        fileID = args['fileID']
+        logging.debug(f"[GetPreprocessAlgoList] args: {args}")
         token = args['token']
 
         #check user isLogin
         if tokenValidator(token):
-            form = {
-                    'fileUid': fileID,
-                    'token': token
-                }
-            response = requests.post( coreApi.GetColumn, data= form)
-            responseObj = response.json()
-            logging.info(f'result: {responseObj}')
-
-            return responseObj
-                
-
+            resp = requests.get(coreApi.GetPreprocessAlgoList)
+            return resp.json()
         else:
             return {"status":"error","msg":"user did not login","data":{}},401

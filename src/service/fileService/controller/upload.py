@@ -29,9 +29,10 @@ class Upload(Resource):
         dataType=args['type']
         userID=args['userID']
         projectID=args['projectID']
+        token = args['token']
 
         #check user isLogin
-        if tokenValidator(args['token']):
+        if tokenValidator(token):
 
             pft=param.dataFileTypeList
             #check project type
@@ -51,8 +52,7 @@ class Upload(Resource):
             }
             data = {
                 'type': dataType,
-                'tokenstr': 'ab',
-                'tokenint': 293
+                'token': token
             }
 
             logging.debug(f'data: {data}')

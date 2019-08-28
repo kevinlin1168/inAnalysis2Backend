@@ -14,5 +14,5 @@ class coreApis():
         self.DoDataViz = param.corehost + '/viz/data/do'
 
         self.GetPreprocessAlgoList = param.corehost + '/preprocess/getalgo'
-        self.doPreprocess = param.corehost + '/preprocess/do'
+        self.DoPreprocess = param.corehost + '/preprocess/do'
         self.PreviewPreprocess = param.corehost + '/preprocess/preview'

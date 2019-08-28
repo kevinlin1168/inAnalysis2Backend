@@ -17,6 +17,7 @@ class DeleteFile(Resource):
         logging.debug(f"[DeleteFile] args: {args}")
 
         fileID = args['fileID']
+        token = args['token']
 
         #check user isLogin
         if tokenValidator(args['token']):
@@ -24,13 +25,10 @@ class DeleteFile(Resource):
                 db=sql()
                 form = {
                         'fileUid': fileID,
-                        'tokenstr': 'ab',
-                        'tokenint': 293
+                        'token': token
                     }
-                logging.info(f'form:{form}')
                 response = requests.post( coreApi.DeleteFile, data= form)
                 responseObj = response.json()
-                logging.info(f'result: {responseObj}')
                 if responseObj["status"] == "success":
                     logging.info('success')
                     db.cursor.execute(f"delete from file where `file_id` = '{fileID}'")
