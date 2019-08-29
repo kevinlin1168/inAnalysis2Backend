@@ -7,7 +7,7 @@ import json
 
 param = params()
 
-def tokenGenerator(data, key = param.secretKey, expire=3600):
+def tokenGenerator(data, key = param.secretKey, expire=1800):
     payload = {
         "iss": "inanalysis.com",
         "iat": int(time.time()),

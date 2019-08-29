@@ -32,9 +32,10 @@ class DownloadFile(Resource):
                 logging.info(f'form:{form}')
                 resp = requests.get( coreApi.Download, data= form)
                 logging.info(resp)
+                with open('111.zip', 'wb') as file:
+                    file.write(resp.content)
                 response = make_response(resp.content)
-                response.headers['Content-Type'] = 'application/octet-stream; charset=utf-8'
-                response.headers['Content-Disposition'] = f'attachment; filename={fileName}'
+                response.headers['Content-Type'] = 'application/octet-stream;'
                 return response
             except Exception as e:
                 logging.error(str(e))

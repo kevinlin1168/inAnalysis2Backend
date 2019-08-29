@@ -3,6 +3,9 @@ from params import params
 class coreApis():
     def __init__(self):
         param=params()
+        self.GetDataProject = param.corehost + '/sys/dataproject'
+        self.GetDataFile = param.corehost + '/sys/datafile'
+
         self.Upload = param.corehost + '/data/upload'
         self.Download = param.corehost + '/data/download'
         self.GetColumn = param.corehost + '/data/getcol' 
