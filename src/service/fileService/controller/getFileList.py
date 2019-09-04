@@ -52,7 +52,7 @@ class GetFileList(Resource):
             finally:
                 db.conn.close()
             logging.debug(f"[GetFileList] resp: {resp}")
-            return {"status":"success","msg":"","data":{'fileList': resp}},201
+            return {"status":"success","msg":"","data":{'fileList': resp}},200
 
 
         else:

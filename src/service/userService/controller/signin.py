@@ -27,7 +27,6 @@ class Singin(Resource):
                 db=sql()
                 db.cursor.execute(f"select * from user where `user_account`='{args['account']}' AND `user_password`='{password}'")
                 result = db.cursor.fetchone()
-                logging.info(f'{result}')
 
                 try:
                     if result != None :

@@ -1,6 +1,6 @@
 class params():
     def __init__(self):
-        self.host='140.112.26.135'
+        self.host='0.0.0.0'
         self.port=7878
 
         self.servicepath='./src/service/'
@@ -16,4 +16,4 @@ class params():
         self.dbpwd='lab125a'
         self.dbschema='inanalysis'
 
-        self.corehost='http://140.112.26.135:8788'
+        self.corehost='http://140.112.26.132:8003'
