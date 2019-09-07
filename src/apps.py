@@ -22,6 +22,7 @@ from service.analyticService.controller.getCorrelationAlgo import GetCorrelation
 from service.analyticService.controller.doPreprocess import DoPreprocess
 from service.analyticService.controller.doCorrelation import DoCorrelation
 from service.analyticService.controller.previewPreprocess import PreviewPreprocess
+from service.analyticService.controller.getAnalyticAlgoByProject import GetAnalyticsAlgoByProject
 from service.modelService.controller.addModel import AddModel
 from service.modelService.controller.getModelByProject import GetModelByProjectID
 from service.modelService.controller.deleteModel import DeleteModel
@@ -64,6 +65,7 @@ api.add_resource(GetCorrelationAlgoList, '/analytic/getCorrelationAlgo')
 api.add_resource(DoPreprocess, '/analytic/doPreprocess')
 api.add_resource(DoCorrelation, '/analytic/doCorrelation')
 api.add_resource(PreviewPreprocess, '/analytic/preprocessPreview')
+api.add_resource(GetAnalyticsAlgoByProject, '/analytic/getAnalyticsAlgoByProject')
 
 api.add_resource(AddModel, '/model/addModel')
 api.add_resource(GetModelByProjectID, '/model/getModelByProjectID')

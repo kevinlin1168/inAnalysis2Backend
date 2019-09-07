@@ -28,6 +28,7 @@ class GetModelByProjectID(Resource):
                 for item in data:
                     respItem = {
                         'modelIndex': item[0],
+                        'fileID': item[3],
                         'modelName': item[4],
                         'algoName': item[5]
                     }

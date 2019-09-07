@@ -38,7 +38,7 @@ class GetProjectInfo(Resource):
             finally:
                 db.conn.close()
             logging.debug(f"[GetProject] resp: {resp}")
-            return {"status":"success","msg":"","data":{'projectList': resp}},201
+            return {"status":"success","msg":"","data":{'projectList': resp}},200
 
 
         else:

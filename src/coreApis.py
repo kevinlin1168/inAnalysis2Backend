@@ -21,3 +21,4 @@ class coreApis():
         self.PreviewPreprocess = param.corehost + '/preprocess/preview'
         self.GetCorrelationAlgoList = param.corehost + '/correlation/getalgo'
         self.DoCorrelation = param.corehost + '/correlation/do'
+        self.GetAnalyticsAlgo = param.corehost + '/analytic/getalgo'

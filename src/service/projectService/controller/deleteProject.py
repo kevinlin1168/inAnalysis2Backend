@@ -1,9 +1,12 @@
 from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
+from coreApis import coreApis
+import requests
 import logging
 
 param=params()
+coreApi = coreApis()
 
 class DeleteProject(Resource):
     def post(self):
@@ -20,14 +23,34 @@ class DeleteProject(Resource):
 
             try:
                 db=sql()
+                db.cursor.execute(f"select `file_id` from file where `project_id`='{projectID}'")
+                result = db.cursor.fetchall()
+                fileIDList = [a[0] for a in result]
+                for fileID in fileIDList:
+                    form = {
+                        'fileUid': fileID,
+                        'token': args['token']
+                    }
+                    response = requests.post( coreApi.DeleteFile, data= form)
+                    responseObj = response.json()
+                    if responseObj["status"] == "success":
+                        db.cursor.execute(f"delete from file where `file_id` = '{fileID}'")
+                        db.conn.commit()
+                        continue
+                    else:
+                        return responseObj, 400
+                
                 db.cursor.execute(f"delete from project where `project_id` = '{projectID}'")
                 db.conn.commit()
+                logging.info(f"[DeleteProject] OK with project id {projectID}")
+                return {"status":"success","msg":"","data":{}},200
+
             except Exception as e:
                 db.conn.rollback()
+                logging.error(e)
+                return {"status":"error","msg":f"{e}","data":{}},400
             finally:
                 db.conn.close()
-            logging.info(f"[DeleteProject] OK with project id {projectID}")
-            return {"status":"success","msg":"","data":{}},201
 
 
         else:

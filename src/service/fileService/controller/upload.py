@@ -65,7 +65,7 @@ class Upload(Resource):
                 try:
                     fileID = response["data"]["fileUid"]
                     db=sql()
-                    db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{fileID}','{filename}','{userID}','{projectID}');")
+                    db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`, `is_upload`) values ('{fileID}','{filename}','{userID}','{projectID}', '1');")
                     db.conn.commit()
                     logging.info(f"[Upload] OK with file uid {fileID}")
                     return response

@@ -34,7 +34,7 @@ class DeleteFile(Resource):
                     db.cursor.execute(f"delete from file where `file_id` = '{fileID}'")
                     db.conn.commit()
                     logging.info(f"[DeleteFile] OK with file id {fileID}")
-                    return {"status":"success","msg":"","data":{}},201
+                    return {"status":"success","msg":"","data":{}},200
                 else:
                     return responseObj
             except Exception as e:
