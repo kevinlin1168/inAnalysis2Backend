@@ -21,4 +21,17 @@ class coreApis():
         self.PreviewPreprocess = param.corehost + '/preprocess/preview'
         self.GetCorrelationAlgoList = param.corehost + '/correlation/getalgo'
         self.DoCorrelation = param.corehost + '/correlation/do'
-        self.GetAnalyticsAlgo = param.corehost + '/analytic/getalgo'
+        self.GetAnalyticAlgo = param.corehost + '/analytic/getalgo'
+        self.GetAnalyticAlgoParam = param.corehost + '/analytic/getparam'
+        self.DeleteModel = param.corehost + '/analytic/delete'
+        self.DoModelTrain = param.corehost + '/analytic/train'
+        self.GetModelStatus = param.corehost + '/analytic/get/status'
+        self.GetModelPreview = param.corehost + '/analytic/preview'
+        self.DoModelPredict = param.corehost + '/analytic/predict'
+        self.DoModelTest = param.corehost + '/analytic/test'
+        self.GetModelParameter = param.corehost + '/analytic/get/param'
+        self.GetModelFailReason = param.corehost + '/analytic/get/fail'
+        self.StopTraining = param.corehost + '/analytic/stop'
+
+
+

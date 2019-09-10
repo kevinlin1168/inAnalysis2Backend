@@ -29,7 +29,7 @@ class GetAnalyticsAlgoByProject(Resource):
                         "dataType": result[4],
                         "projectType": result[3]
                     }
-                    resp = requests.get(coreApi.GetAnalyticsAlgo, data=form)
+                    resp = requests.get(coreApi.GetAnalyticAlgo, data=form)
                     response = resp.json()
                     logging.warn(f'response {response}')
                     if response['status'] == 'success':
