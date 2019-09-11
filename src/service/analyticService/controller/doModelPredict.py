@@ -46,22 +46,36 @@ class DoModelPredict(Resource):
                     }            
                     resp = requests.post(coreApi.DoModelPredict, data=form)
                     response = resp.json()
+                    try:
+                        db.cursor.execute(f"select * from file where `file_id`='{result[3]}'")
+                        fileObject = db.cursor.fetchone()
+                        fileType = fileObject[1][(fileObject[1].rfind(".")+1):]
+                        logging.info(f'{fileType}')
+                    except Exception as e:
+                        db.conn.rollback()
+                        logging.error(str(e))
                     if response['status'] == 'success':
                         if preprocess == '1':
                             try:
                                 preprocessFileID = response["data"]["preprocessedFileUid"]
-                                predictFileID = response["data"]["predictedFileUid"]
-                                db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{preprocessFileID}','{preprocessFileName}','{userID}','{projectID}');")
-                                db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{predictFileID}','{predictFileName}','{userID}','{projectID}');")
-                                db.conn.commit()
-                                return {"status":"success","msg":"predict success","data":{}},200
+                                if preprocessFileID != 'None':
+                                    predictFileID = response["data"]["predictedFileUid"]
+                                    db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{preprocessFileID}','{preprocessFileName}.{fileType}','{userID}','{projectID}');")
+                                    db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{predictFileID}','{predictFileName}.{fileType}','{userID}','{projectID}');")
+                                    db.conn.commit()
+                                    return {"status":"success","msg":"predict success","data":{'isPreprocess':'1'}},200
+                                else:
+                                    predictFileID = response["data"]["predictedFileUid"]
+                                    db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{predictFileID}','{predictFileName}.{fileType}','{userID}','{projectID}');")
+                                    db.conn.commit()
+                                    return {"status":"success","msg":"predict success","data":{'isPreprocess':'0'}},200
                             except Exception as e:
                                 db.conn.rollback()
                                 logging.error(str(e))
                         else:
                             try:
                                 predictFileID = response["data"]["predictedFileUid"]
-                                db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{predictFileID}','{predictFileName}','{userID}','{projectID}');")
+                                db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`) values ('{predictFileID}','{predictFileName}.{fileType}','{userID}','{projectID}');")
                                 db.conn.commit()
                                 return {"status":"success","msg":"predict success","data":{}},200
                             except Exception as e:

@@ -32,12 +32,15 @@ class StopTraining(Resource):
                     }            
                     resp = requests.delete(coreApi.StopTraining, data=form)
                     response = resp.json()
-                    return response, 200
+                    if response['status'] == 'success':
+                        return response, 200
+                    else:
+                        return response, 400
                 else:
-                    return {"status":"error","msg":"model id not found","data":{}},500
+                    return {"status":"error","msg":"model id not found","data":{}},400
             except Exception as e:
                 logging.error(str(e))
-                return {"status":"error","msg":f"{str(e)}","data":{}},500
+                return {"status":"error","msg":f"{str(e)}","data":{}},400
                 db.conn.rollback()
             finally:
                 db.conn.close()
