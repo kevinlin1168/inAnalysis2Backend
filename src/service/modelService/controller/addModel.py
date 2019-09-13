@@ -11,16 +11,18 @@ class AddModel(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('projectID', type=str,required=True)
+        parser.add_argument('userID', type=str,required=True)
         parser.add_argument('fileID', type=str,required=True)
         parser.add_argument('modelName',type=str,required=True)
         parser.add_argument('token',type=str,required=False)
         args = parser.parse_args()
-        logging.info(f'{args}')
+        logging.info(f'[AddModel] {args}')
 
 
         projectID = args['projectID']
         fileID = args['fileID']
         modelName = args['modelName']
+        userID = args['userID']
         token = args['token']
         
         #check user isLogin
@@ -28,7 +30,7 @@ class AddModel(Resource):
             index = modelIndexGenerator().index
             try:
                 db=sql()
-                db.cursor.execute(f"insert into model (`model_index`,`project_id`,`file_id`,`model_name`) values ('{index}','{projectID}','{fileID}','{modelName}');")
+                db.cursor.execute(f"insert into model (`model_index`,`user_id`,`project_id`,`file_id`,`model_name`) values ('{index}','{userID}','{projectID}','{fileID}','{modelName}');")
                 db.conn.commit()
                 return {"status":"success","msg":"","data":{"modelID":index}},201
 

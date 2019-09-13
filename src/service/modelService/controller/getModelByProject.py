@@ -32,9 +32,9 @@ class GetModelByProjectID(Resource):
                     if item[1] == None:
                         respItem = {
                             'modelIndex': item[0],
-                            'fileID': item[3],
-                            'modelName': item[4],
-                            'algoName': item[5]
+                            'fileID': item[4],
+                            'modelName': item[5],
+                            'algoName': item[6]
                         }
                         respList.append(respItem)
                     else:
@@ -48,9 +48,9 @@ class GetModelByProjectID(Resource):
                             respItem = {
                                 'modelIndex': item[0],
                                 'status': response['data'],
-                                'fileID': item[3],
-                                'modelName': item[4],
-                                'algoName': item[5]
+                                'fileID': item[4],
+                                'modelName': item[5],
+                                'algoName': item[6]
                             }
                             respList.append(respItem)
                         else:

@@ -7,6 +7,7 @@ from service.systemService.controller.getDataFile import GetDataFile
 from service.userService.controller.signin import Singin
 from service.userService.controller.signup import Singup
 from service.userService.controller.generateToken import GenerateToken
+from service.userService.controller.getUserInfo import GetUserInfo
 from service.fileService.controller.upload import Upload
 from service.fileService.controller.getFileList import GetFileList
 from service.fileService.controller.delete import DeleteFile
@@ -52,6 +53,7 @@ api.add_resource(GetDataFile, "/system/getDataFile")
 api.add_resource(Singin, "/user/signin")
 api.add_resource(Singup, "/user/signup")
 api.add_resource(GenerateToken, "/user/generateToken")
+api.add_resource(GetUserInfo, "/user/getUserInfo")
 
 api.add_resource(Upload, '/file/upload')
 api.add_resource(GetFileList, '/file/getFileList')
