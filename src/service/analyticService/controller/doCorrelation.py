@@ -29,7 +29,7 @@ class DoCorrelation(Resource):
                 result = db.cursor.fetchone()
                 if(result[2] != None):
                     form = {
-                        'fileUid': result[3],
+                        'fileUid': result[4],
                         'algoname': correlationAlgoName,
                         'token': token
                     }            

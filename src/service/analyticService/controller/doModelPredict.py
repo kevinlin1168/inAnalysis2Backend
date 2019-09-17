@@ -13,7 +13,6 @@ class DoModelPredict(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('token',type=str,required=True)
         parser.add_argument('modelIndex', type=str, required=True)
-        parser.add_argument('fileID', type=str, required=True)
         parser.add_argument('preprocessFileName', type=str, required=True)
         parser.add_argument('predictFileName', type=str, required=True)
         parser.add_argument('preprocess', type=str, required=True)
@@ -23,7 +22,6 @@ class DoModelPredict(Resource):
         logging.debug(f"[DoModelPredict] args: {args}")
 
         modelIndex = args['modelIndex']
-        fileID = args['fileID']
         preprocessFileName = args['preprocessFileName']
         predictFileName = args['predictFileName']
         token = args['token']
@@ -40,14 +38,14 @@ class DoModelPredict(Resource):
                 if(result[1] != None):
                     form = {
                         'modelUid': result[1],
-                        'fileUid': fileID,
+                        'fileUid': result[4],
                         'preprocess': preprocess,
                         'token': token
                     }            
                     resp = requests.post(coreApi.DoModelPredict, data=form)
                     response = resp.json()
                     try:
-                        db.cursor.execute(f"select * from file where `file_id`='{result[3]}'")
+                        db.cursor.execute(f"select * from file where `file_id`='{result[4]}'")
                         fileObject = db.cursor.fetchone()
                         fileType = fileObject[1][(fileObject[1].rfind(".")+1):]
                         logging.info(f'{fileType}')
