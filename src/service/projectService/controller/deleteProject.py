@@ -2,11 +2,13 @@ from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
 from coreApis import coreApis
+from service.modelService.controller.deleteModel import DeleteModelByProject
 import requests
 import logging
 
 param=params()
 coreApi = coreApis()
+deleteModelByProject = DeleteModelByProject()
 
 class DeleteProject(Resource):
     def post(self):
@@ -39,6 +41,9 @@ class DeleteProject(Resource):
                         continue
                     else:
                         return responseObj, 400
+                
+                if deleteModelByProject.delete(projectID, args['token']) != True:
+                    return {"status":"error","msg":"delete project error","data":{}},400
                 
                 db.cursor.execute(f"delete from project where `project_id` = '{projectID}'")
                 db.conn.commit()

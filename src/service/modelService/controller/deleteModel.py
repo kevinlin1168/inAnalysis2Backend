@@ -56,3 +56,35 @@ class DeleteModel(Resource):
 
         else:
             return {"status":"error","msg":"user did not login","data":{}},401
+class DeleteModelByProject():
+    def delete(self, projectID, token):
+        try:
+            db=sql()
+            db.cursor.execute(f"select model_index from model where `project_id`='{projectID}'")
+            result = db.cursor.fetchall()
+            modelIndexList = [a[0] for a in result]
+            for modelIndex in modelIndexList:
+                db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
+                result = db.cursor.fetchone()
+                if(result[1] != None):
+                    form = {
+                        'modelUid': result[1],
+                        'token': token
+                    }
+                    response = requests.post( coreApi.DeleteModel, data= form)
+                    responseObj = response.json()
+                    if responseObj["status"] == "success":
+                        db.cursor.execute(f"delete from model where `model_index` = '{modelIndex}'")
+                        db.conn.commit()
+                    else:
+                        return False
+                else:
+                    db.cursor.execute(f"delete from model where `model_index` = '{modelIndex}'")
+                    db.conn.commit()
+            return True
+        except Exception as e:
+            logging.error(str(e))
+            db.conn.rollback()
+            return False
+        finally:
+            db.conn.close()
