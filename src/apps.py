@@ -6,8 +6,11 @@ from service.systemService.controller.getDataProject import GetDataProject
 from service.systemService.controller.getDataFile import GetDataFile
 from service.userService.controller.signin import Singin
 from service.userService.controller.signup import Singup
+from service.userService.controller.signupVerify import SingupVerify
 from service.userService.controller.generateToken import GenerateToken
 from service.userService.controller.getUserInfo import GetUserInfo
+from service.userService.controller.forgetPassword import ForgetPassword
+from service.userService.controller.forgetPasswordVerify import ForgetPasswordVerify
 from service.fileService.controller.upload import Upload
 from service.fileService.controller.getFileList import GetFileList
 from service.fileService.controller.delete import DeleteFile
@@ -52,8 +55,11 @@ api.add_resource(GetDataFile, "/system/getDataFile")
 
 api.add_resource(Singin, "/user/signin")
 api.add_resource(Singup, "/user/signup")
+api.add_resource(SingupVerify, "/user/signupVerify")
 api.add_resource(GenerateToken, "/user/generateToken")
 api.add_resource(GetUserInfo, "/user/getUserInfo")
+api.add_resource(ForgetPassword, "/user/forgetPassword")
+api.add_resource(ForgetPasswordVerify, "/user/forgetPasswordVerify")
 
 api.add_resource(Upload, '/file/upload')
 api.add_resource(GetFileList, '/file/getFileList')
@@ -78,6 +84,7 @@ api.add_resource(GetAnalyticAlgoParam, '/analytic/getAnalyticAlgoParam')
 api.add_resource(DoModelTrain, '/analytic/doModelTrain')
 api.add_resource(DoModelTest, '/analytic/doModelTest')
 api.add_resource(GetModelPreview, '/analytic/getModelPreview')
+# api.add_resource(GetModelFailReason, '/analytic/get/fail')
 api.add_resource(DoModelPredict, '/analytic/doModelPredict')
 api.add_resource(StopTraining, '/analytic/stopModelTraining')
 

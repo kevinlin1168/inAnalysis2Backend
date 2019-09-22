@@ -37,7 +37,7 @@ class Singin(Resource):
                         token = tokenGenerator(data)
                         return {"status": "success","msg":"","data": {"userID":f'{result[0]}',"userName":f'{result[1]}', "token":f'{token}'}}
                     else:
-                        return {"status":"error","msg":"user don't exist"},200
+                        return {"status":"error","msg":"user don't exist"},400
                 except Exception as e:
                     logging.info(str(e))
 

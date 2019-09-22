@@ -45,13 +45,26 @@ class GetModelByProjectID(Resource):
                         resp = requests.get( coreApi.GetModelStatus, data= form)
                         response = resp.json()
                         if(response['status'] == 'success'):
-                            respItem = {
-                                'modelIndex': item[0],
-                                'status': response['data'],
-                                'fileID': item[4],
-                                'modelName': item[5],
-                                'algoName': item[6]
-                            }
+                            if(response['data'] != 'fail'):
+                                respItem = {
+                                    'modelIndex': item[0],
+                                    'status': response['data'],
+                                    'fileID': item[4],
+                                    'modelName': item[5],
+                                    'algoName': item[6]
+                                }
+                            else:
+                                resp = requests.get( coreApi.GetModelFailReason, data= form)
+                                failReason = resp.json()
+                                if(response['status'] == 'success'):
+                                    respItem = {
+                                        'modelIndex': item[0],
+                                        'status': response['data'],
+                                        'fileID': item[4],
+                                        'modelName': item[5],
+                                        'algoName': item[6],
+                                        'failReason': failReason['data']
+                                    }
                             respList.append(respItem)
                         else:
                             return {"status":"fail","msg":"get model status error","data":{}},500

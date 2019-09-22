@@ -11,6 +11,7 @@ coreApi=coreApis()
 class DoModelPredict(Resource):
     def post(self):
         parser = reqparse.RequestParser()
+        parser.add_argument('fileID', type=str, required=True)
         parser.add_argument('token',type=str,required=True)
         parser.add_argument('modelIndex', type=str, required=True)
         parser.add_argument('preprocessFileName', type=str, required=True)
@@ -21,6 +22,7 @@ class DoModelPredict(Resource):
         args = parser.parse_args()
         logging.debug(f"[DoModelPredict] args: {args}")
 
+        fileID = args['fileID']
         modelIndex = args['modelIndex']
         preprocessFileName = args['preprocessFileName']
         predictFileName = args['predictFileName']
@@ -38,7 +40,7 @@ class DoModelPredict(Resource):
                 if(result[1] != None):
                     form = {
                         'modelUid': result[1],
-                        'fileUid': result[4],
+                        'fileUid': fileID,
                         'preprocess': preprocess,
                         'token': token
                     }            
@@ -79,6 +81,8 @@ class DoModelPredict(Resource):
                             except Exception as e:
                                 db.conn.rollback()
                                 logging.error(str(e))
+                    else:
+                        return response, 400
                 else:
                     return {"status":"error","msg":"model id or file id not found","data":{}},500
             except Exception as e:

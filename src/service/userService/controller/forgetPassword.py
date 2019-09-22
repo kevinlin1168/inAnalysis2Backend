@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
-from service.userService.utils import userUidGenerator, userSignupToken
+from service.userService.utils import userPasswordToken
 import hashlib
 import glob
 import uuid
@@ -17,30 +17,20 @@ import logging
 
 param=params()
 
-class Singup(Resource):
+class ForgetPassword(Resource):
     def post(self):
         try:
             parser = reqparse.RequestParser()
             parser.add_argument('account', type=str,required=True)
-            parser.add_argument('name', type=str,required=True)
-            parser.add_argument('password',type=str,required=True)
-            parser.add_argument('email',type=str,required=False)
             args = parser.parse_args()
-            logging.info(f'{args}')
+            logging.info(f'Forget password {args}')
             account = args['account']
-            name = args['name']
-            email = args['email']
 
             db=sql()
-            db.cursor.execute(f"select * from user where `user_account`='{args['account']}' or `user_email`='{email}'")
-            result = db.cursor.fetchall()
+            db.cursor.execute(f"select * from user where `user_account`='{args['account']}'")
+            result = db.cursor.fetchone()
 
-            if result == ():
-                md5 = hashlib.md5()
-                md5.update(args['password'].encode("utf-8"))
-
-                password = md5.hexdigest()
-                uid = userUidGenerator().uid
+            if result != None:
                 try:
                     # If modifying these scopes, delete the file token.pickle.
                     SCOPES = ['https://www.googleapis.com/auth/gmail.send','https://mail.google.com/']
@@ -60,17 +50,14 @@ class Singup(Resource):
                             pickle.dump(creds, token)
                     service = build('gmail', 'v1', credentials=creds)
                     data = {
-                        "userID": uid,
-                        "account": account,
-                        "userName": name,
-                        "password": password,
-                        "email": email
+                        "userID": result[0],
+                        "account": result[1],
                     }
-                    token = userSignupToken().userSignupTokenGenerator(data)
+                    token = userPasswordToken().userPasswordTokenGenerator(data)
                     logging.info(token)
-                    url = f"http://140.112.26.135:8009/#/signup/{token}"
-                    msg = MIMEText(f"<html>Hey {name}!<br> A sign up attempt requires further verification. To complete the sign up, please click the <a href={url}>url</a> to verify.</html>",'html','utf-8')
-                    msg['to'] = email
+                    url = f"http://140.112.26.135:8009/#/password/{token}"
+                    msg = MIMEText(f"<html>Hey {account}!<br> Forgot password attempt requires further verification. To complete the attempt, please click the <a href={url}>url</a> to verify.</html>",'html','utf-8')
+                    msg['to'] = result[3]
                     msg['from'] = 'inanalysis.github.io@gmail.com'
                     msg['subject'] = "[InAnalysis] Please verify your device"
                     raw = base64.urlsafe_b64encode(msg.as_bytes())
@@ -85,7 +72,7 @@ class Singup(Resource):
                     return {"status":"error","msg":str(e),"data":{}},400
                 
             else:
-                return {"status":"error","msg":"account had been existed","data":{}},400
+                return {"status":"error","msg":"account not existed","data":{}},400
 
         except Exception as e:
             return {"status":"error","msg":f"signup error:{e}","data":{}},400

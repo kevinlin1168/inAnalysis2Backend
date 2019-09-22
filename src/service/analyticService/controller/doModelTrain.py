@@ -12,7 +12,6 @@ class DoModelTrain(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('modelIndex', type=str, required=True)
-        parser.add_argument('fileID', type=str, required=True)
         parser.add_argument('token',type=str,required=True)
         parser.add_argument('dataType', type=str, required=True)
         parser.add_argument('projectType', type=str, required=True)
@@ -24,7 +23,6 @@ class DoModelTrain(Resource):
         logging.debug(f"[DoModelTrain] args: {args}")
 
         modelIndex = args['modelIndex']
-        fileID = args['fileID']
         token = args['token']
         dataType = args['dataType']
         projectType = args['projectType']
@@ -35,31 +33,41 @@ class DoModelTrain(Resource):
 
         #check user isLogin
         if tokenValidator(token):
-                form = {
-                    'token': token,
-                    'fileUid': fileID,
-                    'dataType': dataType,
-                    'projectType': projectType,
-                    'algoName': algoName,
-                    'param': param,
-                    'input': inputColumn,
-                    'output': output
-                }            
-                resp = requests.post(coreApi.DoModelTrain, data=form)
-                response = resp.json()
-                if response['status'] == 'success':
-                    try:
-                        db=sql()
-                        db.cursor.execute(f"update model set `model_id`='{response['data']['modelUid']}', `algo_name`='{algoName}' where `model_index`='{modelIndex}'")
-                        db.conn.commit()
-                        return response, 200
-                    except Exception as e:
-                        logging.error(str(e))
-                        db.conn.rollback()
-                    finally:
-                        db.conn.close()
-                else: 
-                    return response, 500
+            try:
+                db=sql()
+                db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
+                result = db.cursor.fetchone()
+                if result[4] != None:
+                    form = {
+                        'token': token,
+                        'fileUid': result[4],
+                        'dataType': dataType,
+                        'projectType': projectType,
+                        'algoName': algoName,
+                        'param': param,
+                        'input': inputColumn,
+                        'output': output
+                    }            
+                    resp = requests.post(coreApi.DoModelTrain, data=form)
+                    response = resp.json()
+                    if response['status'] == 'success':
+                        try:
+                            db=sql()
+                            db.cursor.execute(f"update model set `model_id`='{response['data']['modelUid']}', `algo_name`='{algoName}' where `model_index`='{modelIndex}'")
+                            db.conn.commit()
+                            return response, 200
+                        except Exception as e:
+                            logging.error(str(e))
+                            db.conn.rollback()
+                    else: 
+                        return {"status":"error","msg":"file id not found","data":{}},500
+                else:
+                    return 
+            except Exception as e:
+                logging.error(str(e))
+                db.conn.rollback()
+            finally:
+                db.conn.close()
             
         else:
             return {"status":"error","msg":"user did not login","data":{}},401

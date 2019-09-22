@@ -13,12 +13,14 @@ class DoModelTest(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument('token',type=str,required=True)
         parser.add_argument('modelIndex', type=str, required=True)
+        parser.add_argument('fileID', type=str, required=True)
         parser.add_argument('label', type=str)
         args = parser.parse_args()
         logging.debug(f"[DoModelTest] args: {args}")
 
         modelIndex = args['modelIndex']
         token = args['token']
+        fileID = args['fileID']
         label = args['label']
         
         if label == None:
@@ -30,10 +32,10 @@ class DoModelTest(Resource):
                 db=sql()
                 db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
                 result = db.cursor.fetchone()
-                if(result[1] != None and result[4]!=None):
+                if(result[1] != None):
                     form = {
                         'modelUid': result[1],
-                        'fileUid': result[4],
+                        'fileUid': fileID,
                         'label': label,
                         'token': token
                     }            
