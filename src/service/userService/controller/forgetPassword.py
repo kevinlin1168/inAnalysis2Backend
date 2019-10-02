@@ -59,7 +59,7 @@ class ForgetPassword(Resource):
                     msg = MIMEText(f"<html>Hey {account}!<br> Forgot password attempt requires further verification. To complete the attempt, please click the <a href={url}>url</a> to verify.</html>",'html','utf-8')
                     msg['to'] = result[3]
                     msg['from'] = 'inanalysis.github.io@gmail.com'
-                    msg['subject'] = "[InAnalysis] Please verify your device"
+                    msg['subject'] = "[InAnalysis] Please verify your identity"
                     raw = base64.urlsafe_b64encode(msg.as_bytes())
                     raw = raw.decode()
                     body = {'raw': raw}

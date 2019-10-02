@@ -69,10 +69,10 @@ class Singup(Resource):
                     token = userSignupToken().userSignupTokenGenerator(data)
                     logging.info(token)
                     url = f"http://140.112.26.135:8009/#/signup/{token}"
-                    msg = MIMEText(f"<html>Hey {name}!<br> A sign up attempt requires further verification. To complete the sign up, please click the <a href={url}>url</a> to verify.</html>",'html','utf-8')
+                    msg = MIMEText(f"<html>Hey {name}!<br> The sign up requires further verification. To complete the sign up, please click the <a href={url}>url</a> to verify.</html>",'html','utf-8')
                     msg['to'] = email
                     msg['from'] = 'inanalysis.github.io@gmail.com'
-                    msg['subject'] = "[InAnalysis] Please verify your device"
+                    msg['subject'] = "[InAnalysis] Please verify your email"
                     raw = base64.urlsafe_b64encode(msg.as_bytes())
                     raw = raw.decode()
                     body = {'raw': raw}
