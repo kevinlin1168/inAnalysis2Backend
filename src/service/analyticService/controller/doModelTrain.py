@@ -38,6 +38,7 @@ class DoModelTrain(Resource):
                 db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
                 result = db.cursor.fetchone()
                 if result[4] != None:
+                    # delete model
                     form = {
                         'token': token,
                         'fileUid': result[4],
