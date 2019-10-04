@@ -15,5 +15,6 @@ class params():
         self.dbuser='ican'
         self.dbpwd='lab125a'
         self.dbschema='inanalysis'
+        
 
         self.corehost='http://140.112.26.132:8003'
