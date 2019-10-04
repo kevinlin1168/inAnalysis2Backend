@@ -51,7 +51,7 @@ class ForgetPassword(Resource):
                     service = build('gmail', 'v1', credentials=creds)
                     data = {
                         "userID": result[0],
-                        "account": result[1],
+                        "account": result[2],
                     }
                     token = userPasswordToken().userPasswordTokenGenerator(data)
                     logging.info(token)

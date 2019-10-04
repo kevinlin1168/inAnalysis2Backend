@@ -33,6 +33,7 @@ from service.analyticService.controller.getModelPreview import GetModelPreview
 from service.analyticService.controller.doModelTest import DoModelTest
 from service.analyticService.controller.doModelPredict import DoModelPredict
 from service.analyticService.controller.stopTraining import StopTraining
+from service.analyticService.controller.getModelParameter import GetModelParameter
 from service.modelService.controller.addModel import AddModel
 from service.modelService.controller.getModelByProject import GetModelByProjectID
 from service.modelService.controller.deleteModel import DeleteModel
@@ -84,7 +85,7 @@ api.add_resource(GetAnalyticAlgoParam, '/analytic/getAnalyticAlgoParam')
 api.add_resource(DoModelTrain, '/analytic/doModelTrain')
 api.add_resource(DoModelTest, '/analytic/doModelTest')
 api.add_resource(GetModelPreview, '/analytic/getModelPreview')
-# api.add_resource(GetModelFailReason, '/analytic/get/fail')
+api.add_resource(GetModelParameter, '/analytic/getModelParameter')
 api.add_resource(DoModelPredict, '/analytic/doModelPredict')
 api.add_resource(StopTraining, '/analytic/stopModelTraining')
 
