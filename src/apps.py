@@ -74,7 +74,6 @@ api.add_resource(DeleteProject, '/project/delete')
 
 api.add_resource(GetVisAlgoList, '/visualize/getAlgo')
 api.add_resource(dataViz, '/visualize/doVisualize')
-
 api.add_resource(GetPreprocessAlgoList, '/analytic/getPreprocessAlgo')
 api.add_resource(GetCorrelationAlgoList, '/analytic/getCorrelationAlgo')
 api.add_resource(DoPreprocess, '/analytic/doPreprocess')
@@ -85,14 +84,13 @@ api.add_resource(GetAnalyticAlgoParam, '/analytic/getAnalyticAlgoParam')
 api.add_resource(DoModelTrain, '/analytic/doModelTrain')
 api.add_resource(DoModelTest, '/analytic/doModelTest')
 api.add_resource(GetModelPreview, '/analytic/getModelPreview')
-api.add_resource(GetModelParameter, '/analytic/getModelParameter')
 api.add_resource(DoModelPredict, '/analytic/doModelPredict')
 api.add_resource(StopTraining, '/analytic/stopModelTraining')
+api.add_resource(GetModelParameter, '/analytic/getModelParameter')
 
 api.add_resource(AddModel, '/model/addModel')
 api.add_resource(GetModelByProjectID, '/model/getModelByProjectID')
 api.add_resource(DeleteModel, '/model/deleteModel')
-
 
 if __name__ == "__main__":
     if '--debug' in sys.argv:

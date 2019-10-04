@@ -1,7 +1,7 @@
 class params():
     def __init__(self):
         self.host='0.0.0.0'
-        self.port=7878
+        self.port=8004
 
         self.servicepath='./src/service/'
         self.secretKey = 'iloveraid1'
