@@ -39,7 +39,7 @@ class DoModelTrain(Resource):
                 result = db.cursor.fetchone()
                 if result[4] != None:
                     # delete model
-                    if result[1] != None or result[1] != 'None':
+                    if result[1] != None and result[1] != 'None':
                         form1 = {
                         "token": token,
                         "modelUid": result[1]
