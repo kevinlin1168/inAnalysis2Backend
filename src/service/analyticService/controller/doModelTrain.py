@@ -49,7 +49,7 @@ class DoModelTrain(Resource):
                         if response1['status'] == 'success':
                             try:
                                 db=sql()
-                                db.cursor.execute(f"update model set `model_id`='{None}'")
+                                db.cursor.execute(f"update model set `model_id`='{None}' where `model_index` = '{modelIndex}'")
                                 db.conn.commit()
                             except Exception as e:
                                 logging.error(str(e))
