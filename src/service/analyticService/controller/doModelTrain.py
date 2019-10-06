@@ -47,9 +47,16 @@ class DoModelTrain(Resource):
                         resp1 = requests.post(coreApi.DeleteModel, data=form1)
                         response1 = resp1.json()
                         if response1['status'] == 'success':
-                            db=sql()
-                            db.cursor.execute(f"update model set `model_id`='{response['data']['modelUid']}'")
-                            db.conn.commit()
+                            try:
+                                db=sql()
+                                db.cursor.execute(f"update model set `model_id`='{None}'")
+                                db.conn.commit()
+                            except Exception as e:
+                                logging.error(str(e))
+                                db.conn.rollback()
+                                raise 'Delete model Error'
+                        else:
+                            raise 'Delete model Error'
 
                     form = {
                         'token': token,
