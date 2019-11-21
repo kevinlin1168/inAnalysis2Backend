@@ -16,7 +16,9 @@ class params():
 
         self.corehost=config.get('DEFAULT', 'corehost')
         self.coreport=config.get('DEFAULT', 'coreport')
-        self.coreurl=self.corehost+':'+self.coreport
+        self.coreurl='http://' + self.corehost+':'+self.coreport
+
+        print(self.coreurl)
 
         self.servicepath='./src/service/'
         self.secretKey = 'iloveraid1'
