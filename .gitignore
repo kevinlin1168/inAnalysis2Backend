@@ -7,4 +7,4 @@ src/test
 *.pkl
 src/service/visualizeService/1.jpg
 src/service/visualizeService/save_icon.png
-src/params.py
+secret.cfg

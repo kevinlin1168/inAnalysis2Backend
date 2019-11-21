@@ -43,9 +43,9 @@ import sys
 sys.dont_write_bytecode = True #disable __pycache__
 from params import params
 
-par=params()
+param=params()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = par.secretKey
+app.config['SECRET_KEY'] = param.secretKey
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=1)
 api = Api(app)
 cors = CORS(app)
@@ -97,5 +97,5 @@ if __name__ == "__main__":
         logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] %(message)s')
     else:
         logging.basicConfig(level=logging.INFO , format='[%(levelname)s] %(message)s')
-    logging.info(f'Inanalysis running at port {par.port}')
-    app.run(debug='--debug' in sys.argv,port=par.port,host='0.0.0.0')
+    logging.info(f'Inanalysis running at port {param.port}')
+    app.run(debug='--debug' in sys.argv,port=param.port,host=param.host)
