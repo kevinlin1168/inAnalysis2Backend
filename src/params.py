@@ -18,7 +18,9 @@ class params():
         self.coreport=config.get('DEFAULT', 'coreport')
         self.coreurl='http://' + self.corehost+':'+self.coreport
 
-        print(self.coreurl)
+        self.frontendhost=config.get('DEFAULT', 'frontendhost')
+        self.frontendport=config.get('DEFAULT', 'frontendport')
+        self.frontendurl='http://' + self.frontendhost+':'+self.frontendport
 
         self.servicepath='./src/service/'
         self.secretKey = 'iloveraid1'

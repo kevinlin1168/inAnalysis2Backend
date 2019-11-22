@@ -55,7 +55,7 @@ class ForgetPassword(Resource):
                     }
                     token = userPasswordToken().userPasswordTokenGenerator(data)
                     logging.info(token)
-                    url = f"http://140.112.26.132:8009/#/password/{token}"
+                    url = f"{param.frontendurl}/#/password/{token}"
                     msg = MIMEText(f"<html>Hey {account}!<br> Forgot password attempt requires further verification. To complete the attempt, please click the <a href={url}>url</a> to verify.</html>",'html','utf-8')
                     msg['to'] = result[3]
                     msg['from'] = 'inanalysis.github.io@gmail.com'
