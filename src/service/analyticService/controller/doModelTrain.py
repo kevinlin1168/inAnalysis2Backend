@@ -80,7 +80,7 @@ class DoModelTrain(Resource):
                             logging.error(str(e))
                             db.conn.rollback()
                     else: 
-                        return {"status":"error","msg":"file id not found","data":{}},500
+                        return {"status":"error","msg":response['msg'],"data":{}},500
                 else:
                     return {"status":"error","msg":"file id not found","data":{}},500
             except Exception as e:
