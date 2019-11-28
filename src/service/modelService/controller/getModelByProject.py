@@ -29,7 +29,7 @@ class GetModelByProjectID(Resource):
                 result = db.cursor.fetchall()
                 data=[list(a) for a in result]
                 for item in data:
-                    if item[1] == None:
+                    if item[1] == None or item[1]=="None":
                         respItem = {
                             'modelIndex': item[0],
                             'fileID': item[4],
