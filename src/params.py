@@ -29,5 +29,6 @@ class params():
         # self.visualizeServiceRoot=self.servicepath+'visualizeService/'
 
         self.dataFileTypeList={'num':['.csv'],'cv':['.zip'],'nlp':['.tsv']}
+        self.studentFileTypeList = ['.csv']
         self.projectTypeList=['abnormal', 'regression', 'classification', 'clustering']
         
