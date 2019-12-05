@@ -34,7 +34,7 @@ class GetStudent(Resource):
                 studentUIDList = data['StudentUID'].tolist()
                 if studentIndex not in studentUIDList:
                     return {"status":"error","msg":"studentIndex not exist","data":{}},400
-                studentID = data[data['StudentUID'] == studentIndex][' 學號'][0]
+                studentID = data[data['StudentUID'] == studentIndex][' 學號'].values[0]
                 data = data[data['StudentUID'] != studentIndex]
                 colNames=data.columns.tolist()
                 if 'index' in colNames:
@@ -44,23 +44,22 @@ class GetStudent(Resource):
                 studentIDList = data[' 學號'].tolist()
                 studentNameList = data[' 姓名'].tolist()
                 respItem['score']={}
-                for studnet in studentIDList:
-                    db.cursor.execute(f"select student_id, score from score where `course_id`='{courseID}' AND `judge_id`= '{studentID}'")
-                    scoreResult = db.cursor.fetchall()
-                    scoreDataList=[list(a) for a in scoreResult]
-                    respItem['score'][f'{studentID}']={}
-                    for scoreData in scoreDataList:
-                        if 'index' in colNames:
-                            respItem['score'][f'{studentID}'][f'{scoreData[0]}'] = {
-                                'name': studentNameList[studentIDList.index(f'{scoreData[0]}')],
-                                'score': scoreData[1],
-                                'index': indexList[studentIDList.index(f'{scoreData[0]}')]
-                            }
-                        else:
-                            respItem['score'][f'{studentID}'][f'{scoreData[0]}'] = {
-                                'name': studentNameList[studentIDList.index(f'{scoreData[0]}')],
-                                'score': scoreData[1]
-                            }
+                db.cursor.execute(f"select student_id, score from score where `course_id`='{courseID}' AND `judge_id`= '{studentID}'")
+                scoreResult = db.cursor.fetchall()
+                scoreDataList=[list(a) for a in scoreResult]
+                respItem['score'][f'{studentID}']={}
+                for scoreData in scoreDataList:
+                    if 'index' in colNames:
+                        respItem['score'][f'{studentID}'][f'{scoreData[0]}'] = {
+                            'name': studentNameList[studentIDList.index(f'{scoreData[0]}')],
+                            'score': scoreData[1],
+                            'index': indexList[studentIDList.index(f'{scoreData[0]}')]
+                        }
+                    else:
+                        respItem['score'][f'{studentID}'][f'{scoreData[0]}'] = {
+                            'name': studentNameList[studentIDList.index(f'{scoreData[0]}')],
+                            'score': scoreData[1]
+                        }
         except Exception as e:
             logging.error(str(e))
             db.conn.rollback()
