@@ -34,17 +34,19 @@ class GetCourseByID(Resource):
                         'jobName': item[3],
                         'deadline': item[4]
                     }
-                    data=pd.read_csv('./src/student/'+courseID+'.csv')
-                    studentIDList = data[' 學號']
-                    respItem['studentList']=studentIDList.tolist()
-                    respItem['scoreList']={}
-                    for studentID in studentIDList:
-                        db.cursor.execute(f"select student_id, score from score where `course_id`='{courseID}' AND `judge_id`= '{studentID}'")
-                        scoreResult = db.cursor.fetchall()
-                        scoreDataList=[list(a) for a in scoreResult]
-                        respItem['scoreList'][f'{studentID}']={}
-                        for scoreData in scoreDataList:
-                            respItem['scoreList'][f'{studentID}'][f'{scoreData[0]}'] = scoreData[1]
+                    filepath = './src/student/'+courseID+'.csv'
+                    if os.filepath.isfile:
+                        data=pd.read_csv(filepath)
+                        studentIDList = data[' 學號']
+                        respItem['studentList']=studentIDList.tolist()
+                        respItem['scoreList']={}
+                        for studentID in studentIDList:
+                            db.cursor.execute(f"select student_id, score from score where `course_id`='{courseID}' AND `judge_id`= '{studentID}'")
+                            scoreResult = db.cursor.fetchall()
+                            scoreDataList=[list(a) for a in scoreResult]
+                            respItem['scoreList'][f'{studentID}']={}
+                            for scoreData in scoreDataList:
+                                respItem['scoreList'][f'{studentID}'][f'{scoreData[0]}'] = scoreData[1]
 
                     resp.append(respItem)
             except Exception as e:
