@@ -37,6 +37,15 @@ from service.analyticService.controller.getModelParameter import GetModelParamet
 from service.modelService.controller.addModel import AddModel
 from service.modelService.controller.getModelByProject import GetModelByProjectID
 from service.modelService.controller.deleteModel import DeleteModel
+from service.courseService.controller.addCourse import AddCourse
+from service.courseService.controller.uploadStudentFile import UploadStudentFile
+from service.courseService.controller.getCourse import GetCourse
+from service.courseService.controller.deleteCourse import DeleteCourse
+from service.courseService.controller.getCourseByID import GetCourseByID
+from service.courseService.controller.modifyCourse import ModifyCourse
+from service.courseService.controller.getStudent import GetStudent
+from service.courseService.controller.judge import Judge
+from service.courseService.controller.sendEmail import SendEmail
 from datetime import timedelta
 import logging
 import sys
@@ -91,6 +100,17 @@ api.add_resource(GetModelParameter, '/analytic/getModelParameter')
 api.add_resource(AddModel, '/model/addModel')
 api.add_resource(GetModelByProjectID, '/model/getModelByProjectID')
 api.add_resource(DeleteModel, '/model/deleteModel')
+
+# Api for TA
+api.add_resource(UploadStudentFile, '/course/uploadStudentFile')
+api.add_resource(AddCourse, '/course/addCourse')
+api.add_resource(GetCourse, '/course/getCourse')
+api.add_resource(DeleteCourse, '/course/deleteCourse')
+api.add_resource(GetCourseByID, '/course/getCourseByID')
+api.add_resource(ModifyCourse, '/course/modifyCourse')
+api.add_resource(GetStudent, '/course/getStudent')
+api.add_resource(Judge, '/course/studentJudge')
+api.add_resource(SendEmail, '/course/sendEmail')
 
 if __name__ == "__main__":
     if '--debug' in sys.argv:
