@@ -27,6 +27,9 @@ class DeleteCourse(Resource):
                 db.cursor.execute(f"delete from course where `course_id` = '{courseID}'")
                 db.cursor.execute(f"delete from score where `course_id` = '{courseID}'")
                 db.conn.commit()
+                filepath = './src/student/'+courseID+'.csv'
+                if os.path.isfile(filepath):
+                    os.remove(filepath)
                 logging.info(f"[DeleteCourse] OK with course id {courseID}")
                 return {"status":"success","msg":"","data":{}},200
             except Exception as e:

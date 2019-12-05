@@ -4,6 +4,7 @@ from params import params
 from utils import tokenValidator,sql
 import logging
 import pandas as pd
+import os
 
 param=params()
 
@@ -35,7 +36,7 @@ class GetCourseByID(Resource):
                         'deadline': item[4]
                     }
                     filepath = './src/student/'+courseID+'.csv'
-                    if os.filepath.isfile:
+                    if os.path.isfile(filepath):
                         data=pd.read_csv(filepath)
                         studentIDList = data[' 學號']
                         respItem['studentList']=studentIDList.tolist()
