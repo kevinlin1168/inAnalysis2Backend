@@ -45,6 +45,10 @@ class GetFileList(Resource):
                             'fileType': item[1][(item[1].rfind(".")+1):],
                             'fileStatus': responseObj["data"]["status"][0]
                         }
+                        db.cursor.execute(f"select Count(*) from model where `file_id`='{item[0]}'")
+                        result = db.cursor.fetchall()
+                        if result[0][0] > 0:
+                            respItem['fileStatus'] = 1
                         resp.append(respItem)
             except Exception as e:
                 logging.error(str(e))
