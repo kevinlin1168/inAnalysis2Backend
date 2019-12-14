@@ -25,7 +25,7 @@ class DeleteModel(Resource):
                 db=sql()
                 db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
                 result = db.cursor.fetchone()
-                if(result[1] != None):
+                if(result[1] != None and result[1] != 'None'):
                     form = {
                         'modelUid': result[1],
                         'token': token
