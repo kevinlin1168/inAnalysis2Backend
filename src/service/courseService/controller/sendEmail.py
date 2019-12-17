@@ -31,6 +31,12 @@ class SendEmail(Resource):
 
         if tokenValidator(token):
             try:
+                db=sql()
+                db.cursor.execute(f"select course_name from course where `course_id`='{courseID}'")
+                result = db.cursor.fetchall()
+                courseData=[list(a) for a in result]
+                for item in courseData:
+                    courseName = item[0]
                 data=pd.read_csv('./src/student/'+courseID+'.csv')
                 
                 for index, row in data.iterrows():
@@ -57,7 +63,7 @@ class SendEmail(Resource):
                     msg = MIMEText(f"<html><br>請點擊<a href={url}>連結</a>進行課堂互評。<br>每個人的評分連結不同，請勿分享</html>",'html','utf-8')
                     msg['to'] = email
                     msg['from'] = 'inanalysis.github.io@gmail.com'
-                    msg['subject'] = "課堂互評網址"
+                    msg['subject'] = f"{courseName}課堂互評網址"
                     raw = base64.urlsafe_b64encode(msg.as_bytes())
                     raw = raw.decode()
                     body = {'raw': raw}
