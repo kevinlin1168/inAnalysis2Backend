@@ -54,10 +54,10 @@ class SendEmail(Resource):
                             pickle.dump(creds, token)
                     service = build('gmail', 'v1', credentials=creds)
                     url = f"{param.frontendurl}/#/judge/{courseID}/{studentIndex}"
-                    msg = MIMEText(f"<html><br>To judgement, please click the <a href={url}>url</a>.</html>",'html','utf-8')
+                    msg = MIMEText(f"<html><br>請點擊<a href={url}>連結</a>進行課堂互評。<br>每個人的評分連結不同，請勿分享</html>",'html','utf-8')
                     msg['to'] = email
                     msg['from'] = 'inanalysis.github.io@gmail.com'
-                    msg['subject'] = "Please click url to judgement"
+                    msg['subject'] = "課堂互評網址"
                     raw = base64.urlsafe_b64encode(msg.as_bytes())
                     raw = raw.decode()
                     body = {'raw': raw}
