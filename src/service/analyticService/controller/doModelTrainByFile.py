@@ -8,7 +8,7 @@ import requests
 param=params()
 coreApi=coreApis()
 
-class DoModelTrain(Resource):
+class DoModelTrainByFile(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('FileIndex', type=str, required=True)

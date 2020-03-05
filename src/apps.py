@@ -29,6 +29,7 @@ from service.analyticService.controller.previewPreprocess import PreviewPreproce
 from service.analyticService.controller.getAnalyticAlgoByProject import GetAnalyticsAlgoByProject
 from service.analyticService.controller.getAnalyticAlgoParam import GetAnalyticAlgoParam
 from service.analyticService.controller.doModelTrain import DoModelTrain
+from service.analyticService.controller.doModelTrainByFile import DoModelTrainByFile
 from service.analyticService.controller.getModelPreview import GetModelPreview
 from service.analyticService.controller.doModelTest import DoModelTest
 from service.analyticService.controller.doModelPredict import DoModelPredict
@@ -91,6 +92,7 @@ api.add_resource(PreviewPreprocess, '/analytic/preprocessPreview')
 api.add_resource(GetAnalyticsAlgoByProject, '/analytic/getAnalyticsAlgoByProject')
 api.add_resource(GetAnalyticAlgoParam, '/analytic/getAnalyticAlgoParam')
 api.add_resource(DoModelTrain, '/analytic/doModelTrain')
+api.add_resource(DoModelTrainByFile, '/analytic/doModelTrainByFile')
 api.add_resource(DoModelTest, '/analytic/doModelTest')
 api.add_resource(GetModelPreview, '/analytic/getModelPreview')
 api.add_resource(DoModelPredict, '/analytic/doModelPredict')
