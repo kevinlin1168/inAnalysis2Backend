@@ -47,6 +47,9 @@ from service.courseService.controller.modifyCourse import ModifyCourse
 from service.courseService.controller.getStudent import GetStudent
 from service.courseService.controller.judge import Judge
 from service.courseService.controller.sendEmail import SendEmail
+from service.RPAService.controller.saveRPA import saveRPA
+from service.RPAService.controller.loadRPA import loadRPA
+from service.RPAService.controller.exportRPA import exportRPA
 from datetime import timedelta
 import logging
 import sys
@@ -102,6 +105,11 @@ api.add_resource(GetModelParameter, '/analytic/getModelParameter')
 api.add_resource(AddModel, '/model/addModel')
 api.add_resource(GetModelByProjectID, '/model/getModelByProjectID')
 api.add_resource(DeleteModel, '/model/deleteModel')
+
+# Api for RPA
+api.add_resource(saveRPA, '/RPA/saveRPA')
+api.add_resource(loadRPA, '/RPA/loadRPA')
+api.add_resource(exportRPA, '/RPA/exportRPA')
 
 # Api for TA
 api.add_resource(UploadStudentFile, '/course/uploadStudentFile')

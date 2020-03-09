@@ -25,6 +25,8 @@ class params():
         self.servicepath='./src/service/'
         self.secretKey = 'iloveraid1'
 
+        self.RPAFilepath='./src/RPA'
+
         # self.dataCollectServiceRoot=self.servicepath+'dataService/'
         # self.visualizeServiceRoot=self.servicepath+'visualizeService/'
 

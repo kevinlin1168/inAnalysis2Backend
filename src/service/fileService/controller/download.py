@@ -32,8 +32,8 @@ class DownloadFile(Resource):
                 logging.info(f'form:{form}')
                 resp = requests.get( coreApi.Download, data= form)
                 logging.info(resp)
-                with open('111.zip', 'wb') as file:
-                    file.write(resp.content)
+                # with open('111.zip', 'wb') as file:
+                #     file.write(resp.content)
                 response = make_response(resp.content)
                 response.headers['Content-Type'] = 'application/octet-stream;'
                 return response
