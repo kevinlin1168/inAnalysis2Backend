@@ -25,6 +25,7 @@ from service.analyticService.controller.getPreprocessAlgo import GetPreprocessAl
 from service.analyticService.controller.getCorrelationAlgo import GetCorrelationAlgoList
 from service.analyticService.controller.doPreprocess import DoPreprocess
 from service.analyticService.controller.doCorrelation import DoCorrelation
+from service.analyticService.controller.doCorrelationByFile import DoCorrelationByFile
 from service.analyticService.controller.previewPreprocess import PreviewPreprocess
 from service.analyticService.controller.getAnalyticAlgoByProject import GetAnalyticsAlgoByProject
 from service.analyticService.controller.getAnalyticAlgoParam import GetAnalyticAlgoParam
@@ -50,6 +51,7 @@ from service.courseService.controller.sendEmail import SendEmail
 from service.RPAService.controller.saveRPA import saveRPA
 from service.RPAService.controller.loadRPA import loadRPA
 from service.RPAService.controller.exportRPA import exportRPA
+from service.RPAService.controller.importRPA import importRPA
 from datetime import timedelta
 import logging
 import sys
@@ -91,6 +93,7 @@ api.add_resource(GetPreprocessAlgoList, '/analytic/getPreprocessAlgo')
 api.add_resource(GetCorrelationAlgoList, '/analytic/getCorrelationAlgo')
 api.add_resource(DoPreprocess, '/analytic/doPreprocess')
 api.add_resource(DoCorrelation, '/analytic/doCorrelation')
+api.add_resource(DoCorrelationByFile, '/analytic/DoCorrelationByFile')
 api.add_resource(PreviewPreprocess, '/analytic/preprocessPreview')
 api.add_resource(GetAnalyticsAlgoByProject, '/analytic/getAnalyticsAlgoByProject')
 api.add_resource(GetAnalyticAlgoParam, '/analytic/getAnalyticAlgoParam')
@@ -110,6 +113,7 @@ api.add_resource(DeleteModel, '/model/deleteModel')
 api.add_resource(saveRPA, '/RPA/saveRPA')
 api.add_resource(loadRPA, '/RPA/loadRPA')
 api.add_resource(exportRPA, '/RPA/exportRPA')
+api.add_resource(importRPA, '/RPA/importRPA')
 
 # Api for TA
 api.add_resource(UploadStudentFile, '/course/uploadStudentFile')

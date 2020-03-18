@@ -30,10 +30,11 @@ class loadRPA(Resource):
                 result,  = db.cursor.fetchone()
                 logging.debug(f"[loadRPA] result: {result}")
                 with open(param.RPAFilepath + '\\'+ result + '.json') as json_file:
-                    data = json.load(json_file)
+                    data = json_file.read()
                     return {"status":"success","msg":"","data":f"{data}"},200
             except Exception as e:
                 logging.debug(f"[loadRPA] error: {e}")
+                return {"status":"success","msg":"","data":""},200
                 db.conn.rollback()
             finally:
                 db.conn.close()  

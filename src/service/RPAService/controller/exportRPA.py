@@ -31,12 +31,13 @@ class exportRPA(Resource):
                 result,  = db.cursor.fetchone()
                 logging.debug(f"[exportRPA] result: {result}")
                 with open(param.RPAFilepath + '\\'+ result + '.json') as json_file:
-                    data = json.load(json_file)
+                    data = json_file.read()
                 headers={}
                 headers['Content-Type']='application/octet-stream'
                 return make_response(data,200,headers)
             except Exception as e:
                 logging.debug(f"[exportRPA] error: {e}")
+                return {"status":"error","msg":"No version","data":{}},200
                 db.conn.rollback()
             finally:
                 db.conn.close()  

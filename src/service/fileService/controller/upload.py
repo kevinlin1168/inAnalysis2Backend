@@ -22,6 +22,7 @@ class Upload(Resource):
         parser.add_argument('type',type=str,required=True)
         parser.add_argument('userID',type=str,required=True)
         parser.add_argument('projectID',type=str,required=True)
+        parser.add_argument('isRPA',type=str,required=False)
         parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
         logging.debug(f"[Upload] args: {args}")
@@ -30,6 +31,7 @@ class Upload(Resource):
         userID=args['userID']
         projectID=args['projectID']
         token = args['token']
+        isRPA = True if (args['isRPA'] == 'Y') else False
 
         #check user isLogin
         if tokenValidator(token):
@@ -64,9 +66,10 @@ class Upload(Resource):
             if response["status"] == "success":
                 try:
                     fileID = response["data"]["fileUid"]
-                    db=sql()
-                    db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`, `is_upload`) values ('{fileID}','{filename}','{userID}','{projectID}', '1');")
-                    db.conn.commit()
+                    if(not isRPA):
+                        db=sql()
+                        db.cursor.execute(f"insert into file (`file_id`,`file_name`,`user_id`,`project_id`, `is_upload`) values ('{fileID}','{filename}','{userID}','{projectID}', '1');")
+                        db.conn.commit()
                     logging.info(f"[Upload] OK with file uid {fileID}")
                     return response
                 except Exception as e:

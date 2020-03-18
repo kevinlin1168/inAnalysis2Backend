@@ -1,35 +1,55 @@
-from flask_restful import Resource, reqparse
+from flask import Flask
+from flask_restful import Api, Resource, reqparse
+from werkzeug.datastructures import FileStorage
 from params import params
 from coreApis import coreApis
 from utils import tokenValidator,sql
-from service.RPAService.utils import RPAUidGenerator
-import logging
+from service.RPAService.utils import RPAUidGenerator, fileChecker
 import requests
-import json
+import glob
+import logging
+
+# app = Flask(__name__)
+# api = Api(app)
 
 param=params()
+coreApi = coreApis()
 
-class saveRPA(Resource):
+class importRPA(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument('userID', type=str, required=True)
-        parser.add_argument('projectID', type=str, required=True)
-        parser.add_argument('RPAJson', type=str, required=True)
+        parser.add_argument('file', type=FileStorage, location='files',required=True)
+        parser.add_argument('userID',type=str,required=True)
+        parser.add_argument('projectID',type=str,required=True)
         parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
-        # logging.debug(f"[saveRPA] args: {args}")
-
-        userID = args['userID']
-        projectID = args['projectID']
-        RPAJson = args['RPAJson']
+        logging.debug(f"[ImportRPA] args: {args}")
+        file = args['file']
+        userID=args['userID']
+        projectID=args['projectID']
         token = args['token']
 
         #check user isLogin
         if tokenValidator(token):
+            #check filetype
+            filename=file.filename
+            filetype=filename[filename.rfind("."):]
+            logging.debug(f"[ImportRPA] File type:{filetype}")
+            if filetype != '.json':
+                return {"status":"error","msg":"file type error","data":{}},400
+            
             uid = RPAUidGenerator().uid
-            with open(param.RPAFilepath +'\\'+ uid + '.json', 'w') as json_file:
-                # json.dump(RPAJson, json_file)
-                json_file.write(RPAJson)
+            savedPath=param.RPAFilepath +'\\'+ uid + '.json'
+            try:
+                file.save(savedPath)
+            except Exception as e:
+                return {"status":"error","msg":f"file error:{e}","data":{}},400
+
+            try:
+                fileChecker(savedPath).check()
+            except Exception as e:
+                return {"status":"error","msg":str(e),"data":{}},400
+
             try:
                 db=sql()
                 db.cursor.execute(f"select MAX(version) from RPA where `project_id`='{projectID}'")
@@ -45,10 +65,10 @@ class saveRPA(Resource):
                 db.conn.commit()
                 return {"status":"success","msg":"","data":{"RPAID":uid}},201
             except Exception as e:
-                logging.debug(f"[saveRPA] error: {e}")
+                logging.debug(f"[ImportRPA] error: {e}")
                 db.conn.rollback()
                 return {"status":"error","msg":"","data":{}},400
             finally:
-                db.conn.close()  
+                db.conn.close()
         else:
             return {"status":"error","msg":"user did not login","data":{}},401
