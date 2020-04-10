@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from params import params
 from coreApis import coreApis
 from utils import tokenValidator,sql
+from service.analytic.service.analyticService import AnalyticService
 import logging
 import requests
 
@@ -29,13 +30,7 @@ class DoPreprocess(Resource):
 
         #check user isLogin
         if tokenValidator(token):
-            form = {
-                'fileUid': fileID,
-                'action': action,
-                'token': token
-            }
-            resp = requests.post(coreApi.DoPreprocess, data=form)
-            response = resp.json()
+            response = AnalyticService().doPreprocess(fileID, action, token)
             
             if response["status"] == "success":
                 try:

@@ -9,7 +9,7 @@ import json
 
 param=params()
 
-class loadRPA(Resource):
+class LoadRPA(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('userID', type=str, required=True)

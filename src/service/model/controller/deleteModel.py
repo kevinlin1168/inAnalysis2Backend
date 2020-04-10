@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from params import params
 from coreApis import coreApis
 from utils import tokenValidator,sql
+from service.model.service.modelService import ModelService
 import logging
 import requests
 
@@ -25,34 +26,21 @@ class DeleteModel(Resource):
                 db=sql()
                 db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
                 result = db.cursor.fetchone()
-                if(result[1] != None and result[1] != 'None'):
-                    form = {
-                        'modelUid': result[1],
-                        'token': token
-                    }
-                    response = requests.post( coreApi.DeleteModel, data= form)
-                    responseObj = response.json()
-                    if responseObj["status"] == "success":
-                        logging.info('success')
-                        db.cursor.execute(f"delete from model where `model_index` = '{modelIndex}'")
-                        db.conn.commit()
-                        logging.info(f"[DeleteModel] OK with file id {modelIndex}")
+                if result[1] != None:
+                    status, resp = ModelService().deleteModel(result[1], token)
+                    if(status):
                         return {"status":"success","msg":"","data":{}},200
                     else:
-                        return responseObj
+                        return resp
                 else:
                     db.cursor.execute(f"delete from model where `model_index` = '{modelIndex}'")
                     db.conn.commit()
                     logging.info(f"[DeleteModel] OK with file id {modelIndex}")
-                    return {"status":"success","msg":"","data":{}},200
-
+                    return {"status":"success","msg":"can not find model","data":{}},200
                 
             except Exception as e:
                 logging.error(str(e))
-                db.conn.rollback()
-            finally:
-                db.conn.close()
-
+                return {"status":"error","msg":f"{e}","data":{}},500
 
         else:
             return {"status":"error","msg":"user did not login","data":{}},401

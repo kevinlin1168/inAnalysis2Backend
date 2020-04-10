@@ -15,7 +15,7 @@ import logging
 param=params()
 coreApi = coreApis()
 
-class importRPA(Resource):
+class ImportRPA(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('file', type=FileStorage, location='files',required=True)

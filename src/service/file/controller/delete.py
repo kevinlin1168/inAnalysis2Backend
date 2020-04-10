@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from params import params
 from coreApis import coreApis
 from utils import tokenValidator,sql
+from service.file.service.fileService import FileService
 import logging
 import requests
 
@@ -23,12 +24,7 @@ class DeleteFile(Resource):
         if tokenValidator(args['token']):
             try:
                 db=sql()
-                form = {
-                        'fileUid': fileID,
-                        'token': token
-                    }
-                response = requests.post( coreApi.DeleteFile, data= form)
-                responseObj = response.json()
+                responseObj = FileService().deleteFile(token, fileID)
                 if responseObj["status"] == "success":
                     logging.info('success')
                     db.cursor.execute(f"delete from file where `file_id` = '{fileID}'")

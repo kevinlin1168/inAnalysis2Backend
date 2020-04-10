@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
-from service.modelService.utils import modelIndexGenerator
+from service.model.service.modelService import ModelService
 import glob
 import logging
 
@@ -27,18 +27,7 @@ class AddModel(Resource):
         
         #check user isLogin
         if tokenValidator(token):
-            index = modelIndexGenerator().index
-            try:
-                db=sql()
-                db.cursor.execute(f"insert into model (`model_index`,`user_id`,`project_id`,`file_id`,`model_name`) values ('{index}','{userID}','{projectID}','{fileID}','{modelName}');")
-                db.conn.commit()
-                return {"status":"success","msg":"","data":{"modelID":index}},201
-
-            except Exception as e:
-                return {"status":"error","msg":str(e),"data":{}},400
-            finally:
-                db.conn.close()
-
+            return ModelService().addModel(projectID, fileID, modelName, userID, token)
 
         else:
             return {"status":"error","msg":"user did not login","data":{}},401    

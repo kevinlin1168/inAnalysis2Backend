@@ -11,34 +11,35 @@ from service.userService.controller.generateToken import GenerateToken
 from service.userService.controller.getUserInfo import GetUserInfo
 from service.userService.controller.forgetPassword import ForgetPassword
 from service.userService.controller.forgetPasswordVerify import ForgetPasswordVerify
-from service.fileService.controller.upload import Upload
-from service.fileService.controller.getFileList import GetFileList
-from service.fileService.controller.delete import DeleteFile
-from service.fileService.controller.download import DownloadFile
-from service.fileService.controller.getColumn import GetFileColumn
+from service.file.controller.upload import Upload
+from service.file.controller.getFileList import GetFileList
+from service.file.controller.delete import DeleteFile
+from service.file.controller.download import DownloadFile
+from service.file.controller.getColumn import GetFileColumn
 from service.projectService.controller.addProject import AddProject
 from service.projectService.controller.getProjectByUser import GetProjectByUserID
 from service.projectService.controller.deleteProject import DeleteProject
 from service.visualizeService.controller.getVisAlgoList import GetVisAlgoList
 from service.visualizeService.controller.dataViz import dataViz
-from service.analyticService.controller.getPreprocessAlgo import GetPreprocessAlgoList
-from service.analyticService.controller.getCorrelationAlgo import GetCorrelationAlgoList
-from service.analyticService.controller.doPreprocess import DoPreprocess
-from service.analyticService.controller.doCorrelation import DoCorrelation
-from service.analyticService.controller.doCorrelationByFile import DoCorrelationByFile
-from service.analyticService.controller.previewPreprocess import PreviewPreprocess
-from service.analyticService.controller.getAnalyticAlgoByProject import GetAnalyticsAlgoByProject
-from service.analyticService.controller.getAnalyticAlgoParam import GetAnalyticAlgoParam
-from service.analyticService.controller.doModelTrain import DoModelTrain
-from service.analyticService.controller.doModelTrainByFile import DoModelTrainByFile
-from service.analyticService.controller.getModelPreview import GetModelPreview
-from service.analyticService.controller.doModelTest import DoModelTest
-from service.analyticService.controller.doModelPredict import DoModelPredict
-from service.analyticService.controller.stopTraining import StopTraining
-from service.analyticService.controller.getModelParameter import GetModelParameter
-from service.modelService.controller.addModel import AddModel
-from service.modelService.controller.getModelByProject import GetModelByProjectID
-from service.modelService.controller.deleteModel import DeleteModel
+from service.analytic.controller.getPreprocessAlgo import GetPreprocessAlgoList
+from service.analytic.controller.getCorrelationAlgo import GetCorrelationAlgoList
+from service.analytic.controller.doPreprocess import DoPreprocess
+from service.analytic.controller.doCorrelation import DoCorrelation
+from service.analytic.controller.doCorrelationByFile import DoCorrelationByFile
+from service.analytic.controller.previewPreprocess import PreviewPreprocess
+from service.analytic.controller.getAnalyticAlgoByProject import GetAnalyticsAlgoByProject
+from service.analytic.controller.getAnalyticAlgoParam import GetAnalyticAlgoParam
+from service.analytic.controller.doModelTrain import DoModelTrain
+from service.analytic.controller.doModelTrainByFile import DoModelTrainByFile
+from service.analytic.controller.getModelPreview import GetModelPreview
+from service.analytic.controller.doModelTest import DoModelTest
+from service.analytic.controller.doModelPredict import DoModelPredict
+from service.analytic.controller.stopTraining import StopTraining
+from service.analytic.controller.getModelParameter import GetModelParameter
+from service.model.controller.addModel import AddModel
+from service.model.controller.getModelByProject import GetModelByProjectID
+from service.model.controller.deleteModel import DeleteModel
+from service.model.controller.deleteModelByUid import DeleteModelUID
 from service.courseService.controller.addCourse import AddCourse
 from service.courseService.controller.uploadStudentFile import UploadStudentFile
 from service.courseService.controller.getCourse import GetCourse
@@ -48,10 +49,11 @@ from service.courseService.controller.modifyCourse import ModifyCourse
 from service.courseService.controller.getStudent import GetStudent
 from service.courseService.controller.judge import Judge
 from service.courseService.controller.sendEmail import SendEmail
-from service.RPAService.controller.saveRPA import saveRPA
-from service.RPAService.controller.loadRPA import loadRPA
-from service.RPAService.controller.exportRPA import exportRPA
-from service.RPAService.controller.importRPA import importRPA
+from service.RPAService.controller.saveRPA import SaveRPA
+from service.RPAService.controller.loadRPA import LoadRPA
+from service.RPAService.controller.exportRPA import ExportRPA
+from service.RPAService.controller.importRPA import ImportRPA
+from service.RPAService.controller.runRPA import RunRPA
 from datetime import timedelta
 import logging
 import sys
@@ -108,12 +110,14 @@ api.add_resource(GetModelParameter, '/analytic/getModelParameter')
 api.add_resource(AddModel, '/model/addModel')
 api.add_resource(GetModelByProjectID, '/model/getModelByProjectID')
 api.add_resource(DeleteModel, '/model/deleteModel')
+api.add_resource(DeleteModelUID, '/model/deleteModelUID')
 
 # Api for RPA
-api.add_resource(saveRPA, '/RPA/saveRPA')
-api.add_resource(loadRPA, '/RPA/loadRPA')
-api.add_resource(exportRPA, '/RPA/exportRPA')
-api.add_resource(importRPA, '/RPA/importRPA')
+api.add_resource(SaveRPA, '/RPA/saveRPA')
+api.add_resource(LoadRPA, '/RPA/loadRPA')
+api.add_resource(ExportRPA, '/RPA/exportRPA')
+api.add_resource(ImportRPA, '/RPA/importRPA')
+api.add_resource(RunRPA, '/RPA/runRPA')
 
 # Api for TA
 api.add_resource(UploadStudentFile, '/course/uploadStudentFile')

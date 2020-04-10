@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse
 from params import params
 from utils import tokenValidator,sql
 from coreApis import coreApis
-from service.modelService.controller.deleteModel import DeleteModelByProject
+from service.model.controller.deleteModel import DeleteModelByProject
 import requests
 import logging
 

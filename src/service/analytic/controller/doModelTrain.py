@@ -4,6 +4,8 @@ from coreApis import coreApis
 from utils import tokenValidator,sql
 import logging
 import requests
+from service.analytic.service.analyticService import AnalyticService
+from service.model.service.modelService import ModelService
 
 param=params()
 coreApi=coreApis()
@@ -38,38 +40,12 @@ class DoModelTrain(Resource):
                 db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
                 result = db.cursor.fetchone()
                 if result[4] != None:
-                    # delete model
-                    if result[1] != None and result[1] != 'None':
-                        form1 = {
-                        "token": token,
-                        "modelUid": result[1]
-                        }
-                        resp1 = requests.post(coreApi.DeleteModel, data=form1)
-                        response1 = resp1.json()
-                        if response1['status'] == 'success':
-                            try:
-                                db=sql()
-                                db.cursor.execute(f"update model set `model_id`='{None}' where `model_index` = '{modelIndex}'")
-                                db.conn.commit()
-                            except Exception as e:
-                                logging.error(str(e))
-                                db.conn.rollback()
-                                raise 'Delete model Error'
-                        else:
+                    if(result[1] != None):
+                        status,resp = ModelService().deleteModel(result[1], token)
+                        if( not status ):
                             raise 'Delete model Error'
 
-                    form = {
-                        'token': token,
-                        'fileUid': result[4],
-                        'dataType': dataType,
-                        'projectType': projectType,
-                        'algoName': algoName,
-                        'param': param,
-                        'input': inputColumn,
-                        'output': output
-                    }            
-                    resp = requests.post(coreApi.DoModelTrain, data=form)
-                    response = resp.json()
+                    response = AnalyticService().doModelTrain(token, result[4], dataType, projectType, algoName, param, inputColumn, output)
                     if response['status'] == 'success':
                         try:
                             db=sql()

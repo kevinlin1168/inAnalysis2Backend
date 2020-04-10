@@ -4,6 +4,7 @@ from coreApis import coreApis
 from utils import tokenValidator,sql
 import logging
 import requests
+from service.analytic.service.analyticService import AnalyticService
 
 param=params()
 coreApi=coreApis()
@@ -22,7 +23,7 @@ class DoModelTrainByFile(Resource):
         args = parser.parse_args()
         logging.debug(f"[DoModelTrain] args: {args}")
 
-        FileIndex = args['FileIndex']
+        fileIndex = args['FileIndex']
         token = args['token']
         dataType = args['dataType']
         projectType = args['projectType']
@@ -34,32 +35,18 @@ class DoModelTrainByFile(Resource):
         #check user isLogin
         if tokenValidator(token):
             try:
-                form = {
-                    'token': token,
-                    'fileUid': FileIndex,
-                    'dataType': dataType,
-                    'projectType': projectType,
-                    'algoName': algoName,
-                    'param': param,
-                    'input': inputColumn,
-                    'output': output
-                }            
-                resp = requests.post(coreApi.DoModelTrain, data=form)
-                response = resp.json()
+                     
+                response = AnalyticService().trainModel(token, fileIndex, dataType, projectType, algoName, param, inputColumn, output)
                 if response['status'] == 'success':
                     try:
                         return response, 200
                     except Exception as e:
                         logging.error(str(e))
-                        db.conn.rollback()
                 else: 
                     return {"status":"error","msg":response['msg'],"data":{}},500
             except Exception as e:
                 logging.error(str(e))
                 return {"status":"error","msg":f"{str(e)}","data":{}},500
-                db.conn.rollback()
-            finally:
-                db.conn.close()
             
         else:
             return {"status":"error","msg":"user did not login","data":{}},401
