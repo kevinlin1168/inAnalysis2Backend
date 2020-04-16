@@ -15,14 +15,18 @@ class SaveRPA(Resource):
         parser.add_argument('userID', type=str, required=True)
         parser.add_argument('projectID', type=str, required=True)
         parser.add_argument('RPAJson', type=str, required=True)
+        parser.add_argument('description', type=str, required=False)
+        parser.add_argument('name', type=str, required=False)
         parser.add_argument('token',type=str,required=True)
         args = parser.parse_args()
-        # logging.debug(f"[saveRPA] args: {args}")
+        logging.debug(f"[saveRPA] args: {args}")
 
         userID = args['userID']
         projectID = args['projectID']
         RPAJson = args['RPAJson']
         token = args['token']
+        description = args['description']
+        name = args['name']
 
         #check user isLogin
         if tokenValidator(token):
@@ -39,9 +43,16 @@ class SaveRPA(Resource):
                     
                 else:
                     version = result + 1
+                    if (name == '' or description == ''):
+                        db.cursor.execute(f"select * from RPA where `project_id`='{projectID}' AND `top_version`='Y'")
+                        result = db.cursor.fetchone()
+                        if (name == ''):
+                            name = result[6]
+                        if (description == ''):
+                            description = result[5]
                     db.cursor.execute(f"update RPA set `top_version`='N' where `user_id` = '{userID}' and `project_id` = '{projectID}'")
                     db.conn.commit()
-                db.cursor.execute(f"insert into RPA (`user_id`,`project_id`, `version`, `RPA_id`, `top_version`) values ('{userID}','{projectID}','{version}','{uid}','Y');")
+                db.cursor.execute(f"insert into RPA (`user_id`,`project_id`, `version`, `RPA_id`, `top_version`, `description`, `name`) values ('{userID}','{projectID}','{version}','{uid}','Y', '{description}', '{name}');")
                 db.conn.commit()
                 return {"status":"success","msg":"","data":{"RPAID":uid}},201
             except Exception as e:

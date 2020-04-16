@@ -54,6 +54,8 @@ class RunRPA(Resource):
                 # logging.debug(f'{project}')
                 self.nodes = self.dataObj["nodes"]
                 self.links = self.dataObj["links"]
+                if(self.nodes == [] or self.links == []):
+                    self.dataObj['status'] = 'success'
                 self.saveFile()
                 fileNodeList = list(filter(lambda x: x['type'] == 'File', self.nodes))
                 threads = []
@@ -150,17 +152,24 @@ class RunRPA(Resource):
                             time.sleep(180)
                             response = ModelService().getModelStatus(self.token, attribute['modelID'])
                         if(nodeType == 'Predict'):
+                            if 'predictFileID' in attribute:
+                                logging.debug('Delete Predict File')
+                                response = FileService().deleteFile(self.token, attribute['predictFileID'])
+                                if(response['status'] != 'success'):
+                                    raise Exception('Delete Predict File Error')
                             response = AnalyticService().doModelPredict(self.token, attribute['modelID'], attribute['newFileID'], '0')
                             if(response['status'] == 'success'):
                                 index = next((i for i in range(len(self.nodes)) if self.nodes[i]['id'] == linkNode['id']), None)
                                 self.nodes[index]['attribute']['predictFileID'] = response["data"]["predictedFileUid"]
+                                self.nodes[index]['isComplete'] = True
                                 self.saveFile()
                                 self.runFlow(linkNode['id'])
                         if(nodeType == 'Test'):
                             response = AnalyticService().doModelTest(self.token, attribute['modelID'], attribute['newFileID'], '')
                             if(response['status'] == 'success'):
                                 index = next((i for i in range(len(self.nodes)) if self.nodes[i]['id'] == linkNode['id']), None)
-                                # self.nodes[index]['attribute']['testFileID'] = response["data"]["predictedFileUid"]
+                                self.nodes[index]['attribute']['testResp'] = response["data"]
+                                self.nodes[index]['isComplete'] = True
                                 self.saveFile()
                                 self.runFlow(linkNode['id'])
             if(isRoot == True):

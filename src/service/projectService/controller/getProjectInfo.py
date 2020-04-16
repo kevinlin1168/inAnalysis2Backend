@@ -22,23 +22,19 @@ class GetProjectInfo(Resource):
             resp = []
             try:
                 db=sql()
-                db.cursor.execute(f"select * from model, file where `model.project_id`='{projectID}' AND `file.project_id`='{projectID}'")
-                result = db.cursor.fetchall()
-                data=[list(a) for a in result]
-                for item in data:
-                    respItem = {
-                        'projectID': item[0],
-                        'projectName': item[2],
-                        'projectType': item[3],
-                        'dataType': item[4]
-                    }
-                    resp.append(respItem)
+                db.cursor.execute(f"select * from project where `project_id`='{projectID}'")
+                result = db.cursor.fetchone()
+                respItem = {
+                    'projectName': result[2],
+                    'projectType': result[3],
+                    'dataType': result[4]
+                }
             except Exception as e:
                 db.conn.rollback()
             finally:
                 db.conn.close()
             logging.debug(f"[GetProject] resp: {resp}")
-            return {"status":"success","msg":"","data":{'projectList': resp}},200
+            return {"status":"success","msg":"","data":{'project': respItem}},200
 
 
         else:

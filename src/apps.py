@@ -19,6 +19,7 @@ from service.file.controller.getColumn import GetFileColumn
 from service.projectService.controller.addProject import AddProject
 from service.projectService.controller.getProjectByUser import GetProjectByUserID
 from service.projectService.controller.deleteProject import DeleteProject
+from service.projectService.controller.getProjectInfo import GetProjectInfo
 from service.visualizeService.controller.getVisAlgoList import GetVisAlgoList
 from service.visualizeService.controller.dataViz import dataViz
 from service.analytic.controller.getPreprocessAlgo import GetPreprocessAlgoList
@@ -54,6 +55,7 @@ from service.RPAService.controller.loadRPA import LoadRPA
 from service.RPAService.controller.exportRPA import ExportRPA
 from service.RPAService.controller.importRPA import ImportRPA
 from service.RPAService.controller.runRPA import RunRPA
+from service.RPAService.controller.getRPA import GetRPA
 from datetime import timedelta
 import logging
 import sys
@@ -88,6 +90,7 @@ api.add_resource(GetFileColumn, '/file/getColumn')
 api.add_resource(AddProject, '/project/add')
 api.add_resource(GetProjectByUserID, '/project/getProjectByUserID')
 api.add_resource(DeleteProject, '/project/delete')
+api.add_resource(GetProjectInfo, '/project/getProjectInfo')
 
 api.add_resource(GetVisAlgoList, '/visualize/getAlgo')
 api.add_resource(dataViz, '/visualize/doVisualize')
@@ -118,6 +121,7 @@ api.add_resource(LoadRPA, '/RPA/loadRPA')
 api.add_resource(ExportRPA, '/RPA/exportRPA')
 api.add_resource(ImportRPA, '/RPA/importRPA')
 api.add_resource(RunRPA, '/RPA/runRPA')
+api.add_resource(GetRPA, '/RPA/getRPA')
 
 # Api for TA
 api.add_resource(UploadStudentFile, '/course/uploadStudentFile')
