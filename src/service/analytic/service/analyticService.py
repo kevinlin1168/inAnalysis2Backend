@@ -75,3 +75,15 @@ class AnalyticService():
             return response
         except Exception as e:
             return {"status":"error","msg":f"{e}","data":{}},500
+
+    def getModelPreview(self, token, modelUid):
+        try:
+            form = {
+                'modelUid': modelUid,
+                'token': token
+            }            
+            resp = requests.get(coreApi.GetModelPreview, data=form)
+            response = resp.json()
+            return response
+        except Exception as e:
+            return {"status":"error","msg":f"{e}","data":{}},500

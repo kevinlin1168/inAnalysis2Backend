@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from params import params
 from coreApis import coreApis
 from utils import tokenValidator,sql
+from service.analytic.service.analyticService import AnalyticService
 import logging
 import requests
 
@@ -26,12 +27,7 @@ class GetModelPreview(Resource):
                 db.cursor.execute(f"select * from model where `model_index`='{modelIndex}'")
                 result = db.cursor.fetchone()
                 if(result[1] != None):
-                    form = {
-                        'modelUid': result[1],
-                        'token': token
-                    }            
-                    resp = requests.get(coreApi.GetModelPreview, data=form)
-                    response = resp.json()
+                    response = AnalyticService().getModelPreview(token, result[1])
                     return response, 200
                 else:
                     return {"status":"error","msg":"model id not found","data":{}},500
