@@ -181,14 +181,15 @@ class RunRPA(Resource):
                 while(response['data'] != 'success'):
                     if(response['data'] == 'fail'):
                         raise Exception('Train Model fail')
-                    time.sleep(5)
+                    time.sleep(180)
                     response = ModelService().getModelStatus(self.token, attribute['modelID'])
                 response = AnalyticService().getModelPreview(self.token, attribute['modelID'])
                 split = response['data']['text'].replace(" ","").split("\n")
                 for item in split:
                     if( item.find(attribute['metric'], 0, len(attribute['metric'])) != -1):
                         temp = item.replace(attribute['metric']+":","")
-                        if(float(temp) <= float(attribute['metricValue'])):
+                        logging.debug(f'temp: {temp}')
+                        if(eval(attribute['metricValue'], {'x': float(temp)})):
                             if(attribute['left']['status'] == True):
                                 self.runFilter(attribute['left']['id'], self.nodes, attribute['modelID'])
                             else:

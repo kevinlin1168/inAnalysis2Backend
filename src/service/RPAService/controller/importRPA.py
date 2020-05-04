@@ -61,7 +61,7 @@ class ImportRPA(Resource):
                     version = result + 1
                     db.cursor.execute(f"update RPA set `top_version`='N' where `user_id` = '{userID}' and `project_id` = '{projectID}'")
                     db.conn.commit()
-                db.cursor.execute(f"insert into RPA (`user_id`,`project_id`, `version`, `RPA_id`, `top_version`) values ('{userID}','{projectID}','{version}','{uid}','Y');")
+                db.cursor.execute(f"insert into RPA (`user_id`,`project_id`, `version`, `RPA_id`, `top_version`, `name`, `description`) values ('{userID}','{projectID}','{version}','{uid}','Y', '', '');")
                 db.conn.commit()
                 return {"status":"success","msg":"","data":{"RPAID":uid}},201
             except Exception as e:
