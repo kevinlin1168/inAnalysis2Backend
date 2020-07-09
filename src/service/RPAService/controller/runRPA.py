@@ -24,6 +24,7 @@ class RunRPA(Resource):
         self.finishCount = 0
         self.RPAID = ''
         self.token = ''
+        self.userID = ''
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument('userID', type=str, required=True)
@@ -33,6 +34,7 @@ class RunRPA(Resource):
         logging.debug(f"[runRPA] args: {args}")
 
         userID = args['userID']
+        self.userID = userID
         projectID = args['projectID']
         token = args['token']
         self.token = token
@@ -148,7 +150,7 @@ class RunRPA(Resource):
                         logging.debug(f'response{response}')
                         if(response['data'] == 'fail'):
                             raise Exception('Train Model fail')
-                        time.sleep(180)
+                        time.sleep(60)
                         response = ModelService().getModelStatus(self.token, attribute['modelID'])
                     if(nodeType == 'Predict'):
                         if 'predictFileID' in attribute:
@@ -181,7 +183,7 @@ class RunRPA(Resource):
                 while(response['data'] != 'success'):
                     if(response['data'] == 'fail'):
                         raise Exception('Train Model fail')
-                    time.sleep(180)
+                    time.sleep(60)
                     response = ModelService().getModelStatus(self.token, attribute['modelID'])
                 response = AnalyticService().getModelPreview(self.token, attribute['modelID'])
                 split = response['data']['text'].replace(" ","").split("\n")
@@ -211,9 +213,11 @@ class RunRPA(Resource):
                 if(self.finishCount == self.threadsCount):
                     logging.debug('finish')
                     self.dataObj['status'] = 'success'
+                    self.sendLineMessage('success')
                     self.saveFile()
         except Exception as e:
             self.dataObj['status'] = 'error'
+            self.sendLineMessage('error')
             logging.error(f"{e}")
             self.saveFile()
     
@@ -224,4 +228,23 @@ class RunRPA(Resource):
                 json_file.write(json.dumps(self.dataObj))
         except Exception as e:
             raise Exception(f'[runRPA]{e}')
-    
+
+    def sendLineMessage(self, status):
+        db = sql()
+        db.cursor.execute(f"select * from user where `user_id`='{self.userID}'")
+        result = db.cursor.fetchone()
+        lineID = result[6]
+        db.cursor.execute(f"select * from RPA where `RPA_id`='{self.RPAID}'")
+        result = db.cursor.fetchone()
+        RPAName = result[6]
+        if (lineID== None):
+            return
+        else:
+            form = {
+                'lineID': lineID,
+                'status': status,
+                'projectName': RPAName
+            }
+            logging.info(f'{form}')
+            resp = requests.post('https://140.112.26.135:8005/sendMessage', data=form)
+            logging.info(f'{resp}')

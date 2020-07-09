@@ -41,11 +41,20 @@ class DoModelTrain(Resource):
                 result = db.cursor.fetchone()
                 if result[4] != None:
                     if(result[1] != None):
-                        status,resp = ModelService().deleteModel(result[1], token)
-                        if( not status ):
-                            raise 'Delete model Error'
+                        form = {
+                            'modelUid': result[1],
+                            'token': token
+                        }
+                        response = requests.post( coreApi.DeleteModel, data= form)
+                        responseObj = response.json()
+                        logging.info(f'[deleteModel]: {responseObj}')
+                        if responseObj["status"] == "success":
+                            db.cursor.execute(f"update model set `model_id`='{None}' where `model_id` = '{modelIndex}'")
+                            db.conn.commit()
+                            logging.info(f"[updateModel] OK with model id {modelIndex}")
 
                     response = AnalyticService().doModelTrain(token, result[4], dataType, projectType, algoName, param, inputColumn, output)
+                    logging.debug(f"[DoModelTrain] response: {response}")
                     if response['status'] == 'success':
                         try:
                             db=sql()

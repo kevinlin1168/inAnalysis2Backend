@@ -30,7 +30,7 @@ class DoPreprocess(Resource):
 
         #check user isLogin
         if tokenValidator(token):
-            response = AnalyticService().doPreprocess(fileID, action, token)
+            response = AnalyticService().doPreprocess(token, fileID, action)
             
             if response["status"] == "success":
                 try:
