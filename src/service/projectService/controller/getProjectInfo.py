@@ -31,9 +31,9 @@ class GetProjectInfo(Resource):
                 }
             except Exception as e:
                 db.conn.rollback()
+                return {"status":"error","msg":"project not found","data":{}},200
             finally:
                 db.conn.close()
-            logging.debug(f"[GetProject] resp: {resp}")
             return {"status":"success","msg":"","data":{'project': respItem}},200
 
 
